@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[ExecuteAlways]
 public class MapGrid : MonoBehaviour
 {
     public static MapGrid Instance { get; private set; }
@@ -13,12 +14,17 @@ public class MapGrid : MonoBehaviour
     }
 
     //[SerializeField] private Vector2Int dimensions = new Vector2Int(100, 100);
-    [SerializeField] [Range(0,500)] private int dimensionX = 100;
-    [SerializeField] [Range(0,500)]private int dimensionY = 100;
+    [SerializeField] [Range(32,500)] private int dimensionX = 100;
+    public int DimensionX { get { return dimensionX; } }
+        
+    [SerializeField] [Range(32,500)] private int dimensionY = 100;
+    public int DimensionY { get { return dimensionY; } }
 
-    [SerializeField] private Vector2 cellDimensions = new Vector2(1, 1);
+    private Vector2 cellDimensions = new Vector2(1, 1);
+    //public Vector2 CellDimensions { get {  return cellDimensions; } }
 
     [SerializeField] private int margin = 5;
+    public int Margin { get { return margin; } }
 
     public System.Collections.Generic.IEnumerable<Vector2> AllSquaresCenter(bool withMargin = false)
     {
@@ -47,12 +53,20 @@ public class MapGrid : MonoBehaviour
 
     }
 
+    public Vector3 getCorner(CardinalDirection cardinalDirection,bool includeMargin=false)
+    {
+        if(includeMargin)
+            return getCornerWithMargin(cardinalDirection);
+        //else
+            return getCornerNoMargin(cardinalDirection);
+    }
+
     /// <summary>
     /// returns the coordinates of the corner according to the cardinalDirection
     /// </summary>
     /// <param name="corner"></param>
     /// <returns></returns>
-    public Vector3 getCorner(CardinalDirection cardinalDirection)
+    private Vector3 getCornerNoMargin(CardinalDirection cardinalDirection)
     {
         if (cardinalDirection == CardinalDirection.North ||
             cardinalDirection == CardinalDirection.South ||
@@ -97,7 +111,7 @@ public class MapGrid : MonoBehaviour
     /// <param name="cardinalDirection"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public Vector3 getCornerWithMargin(CardinalDirection cardinalDirection)
+    private Vector3 getCornerWithMargin(CardinalDirection cardinalDirection)
     {
         if (cardinalDirection == CardinalDirection.North ||
             cardinalDirection == CardinalDirection.South ||
@@ -229,10 +243,10 @@ public class MapGrid : MonoBehaviour
             Gizmos.DrawLine(from, to);
         }
 
-        Vector3 southWest = getCorner(CardinalDirection.SouthWest);
-        Vector3 northWest = getCorner(CardinalDirection.NorthWest);
-        Vector3 northEast = getCorner(CardinalDirection.NorthEast);
-        Vector3 southEast = getCorner(CardinalDirection.SouthEast);
+        Vector3 southWest = getCornerNoMargin(CardinalDirection.SouthWest);
+        Vector3 northWest = getCornerNoMargin(CardinalDirection.NorthWest);
+        Vector3 northEast = getCornerNoMargin(CardinalDirection.NorthEast);
+        Vector3 southEast = getCornerNoMargin(CardinalDirection.SouthEast);
 
         Vector3 southWestWithMargin = getCornerWithMargin(CardinalDirection.SouthWest);
         Vector3 northWestWithMargin = getCornerWithMargin(CardinalDirection.NorthWest);
