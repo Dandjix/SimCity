@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class TerrainPainter : MonoBehaviour
+public class TerrainColorGenerator : MonoBehaviour
 {
     [SerializeField] private TerrainType[] terrainTypes;
 
-    public void Color(float[,] heights,int width,int length)
+
+    public void CreateMesh()
+    {
+
+    }
+
+    public Texture2D GenerateTexture(float[,] heights,int width,int length)
     {
         Color[] colorMap = new Color[width * length];
 
@@ -22,7 +28,11 @@ public class TerrainPainter : MonoBehaviour
                 {
                     if (heights[x, y] <= terrainTypes[i].height)
                     {
-                        colorMap[x * heights.GetLength(1) + y] = terrainTypes[i].color;
+                        Color color = terrainTypes[i].color;
+                        //Debug.Log("x : " + x + "l 0 : " + heights.GetLength(0));
+                        //Debug.Log("y : " + y + "l 1 : " + heights.GetLength(1));
+                        //Debug.Log("cmap : " + colorMap.Length);
+                        colorMap[x * heights.GetLength(1) + y] = color;
                         break;
                     }
                 }
@@ -30,9 +40,8 @@ public class TerrainPainter : MonoBehaviour
         }
 
         Texture2D texture = TextureProcessing.TextureFromColorMap(colorMap,width,length);
-
-        //GetComponent<Renderer>().material.mainTexture = texture;
-
+        //Debug.Log("texture : " + texture);
+        return texture;
     }
 
     [System.Serializable]

@@ -9,18 +9,19 @@ public static class MeshGenerator
         int width = heightMap.GetLength(0);
         int length = heightMap.GetLength(1);
 
-        TerrainMeshData terrainMeshData = new TerrainMeshData(width, length);
+        TerrainMeshData terrainMeshData = new TerrainMeshData(length, width);
         int vertexIndex = 0;
-        for (int y = 0; y < length; y++)
+        for (int y = 0; y < width; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < length; x++)
             {
-                terrainMeshData.vertices[vertexIndex] = new Vector3(x, heightMap[x, y], y);
-                terrainMeshData.uvs[vertexIndex] = new Vector2(x/(float)width, y/(float)length);
-                if(x<width-1 && y<length-1)
+                float height = heightMap[y, x];
+                terrainMeshData.vertices[vertexIndex] = new Vector3(x, height, y);
+                terrainMeshData.uvs[vertexIndex] = new Vector2(x/(float)length, y/(float)length);
+                if(x<length-1 && y<width-1)
                 {
-                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+1,vertexIndex+width+1);
-                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+width,vertexIndex+width+1);
+                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+length+1, vertexIndex + 1);
+                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+length,vertexIndex+length+1);
                 }
                 vertexIndex++;
             }

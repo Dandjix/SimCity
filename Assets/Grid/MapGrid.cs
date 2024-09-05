@@ -214,7 +214,7 @@ public class MapGrid : MonoBehaviour
         return new Vector3(x,y,z);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
         for (int i = -margin+1; i<= dimensionX+margin-1; i++)

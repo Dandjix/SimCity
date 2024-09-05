@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-[RequireComponent(typeof(TerrainPainter))]
+[RequireComponent(typeof(TerrainColorGenerator))]
+[RequireComponent (typeof(TerrainDisplay))]
 public class TerrainGenerator : MonoBehaviour
 {
-    private MeshRenderer meshRenderer;
+    private TerrainColorGenerator painter;
 
-    private TerrainPainter painter;
+    private TerrainDisplay display;
 
     [SerializeField] private MapGrid mapGrid;
 
     [SerializeField] int seed;
 
-    [SerializeField] private float height = 20;
+    [Min(0)][SerializeField] private float height = 20;
     [SerializeField] private float heightOffset = -4;
 
     [Min(1)] [SerializeField] private float scale = 20;
@@ -23,16 +24,14 @@ public class TerrainGenerator : MonoBehaviour
     [Range(0,1)][SerializeField] private float persistence;
     [Min(1)][SerializeField] private float lacunarity;
 
-    private TerrainDisplay display;
-
     public Vector2 offset;
 
     public bool autoUpdate = false;
 
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
-        painter = GetComponent<TerrainPainter>();
+        display = GetComponent<TerrainDisplay>();
+        painter = GetComponent<TerrainColorGenerator>();
         //Debug.Log("in awake : " + terrain);
     }
 
@@ -72,7 +71,8 @@ public class TerrainGenerator : MonoBehaviour
     public void Generate()
     {
         //Debug.Log("generating ...");
-        terrain.terrainData = GenerateTerrainData(terrain.terrainData);
+
+        GenerateTerrainData();
     }
 
     private void GenerateTerrainData()
@@ -81,9 +81,16 @@ public class TerrainGenerator : MonoBehaviour
 
         transform.position = GetPosition();
 
+        transform.localScale = new Vector3(1, height, 1);
+
         var heights = Noise.GenerateHeights(size.x, size.y, seed, scale, octaves, persistence, lacunarity, offset);
 
-        painter.Color(heights,size.x,size.y);
+        //Debug.Log("size : " + size);
+
+        Texture2D texture = painter.GenerateTexture(heights,size.x+1,size.y+1);
+        TerrainMeshData meshData = MeshGenerator.GenerateTerrainMeshData(heights);
+
+        display.DrawMesh(meshData, texture);
     }
 
 
