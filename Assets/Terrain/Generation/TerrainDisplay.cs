@@ -14,7 +14,7 @@ public class TerrainDisplay : MonoBehaviour
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
 
-    void Start()
+    void Awake()
     {
         renderer = GetComponent<Renderer>();
         meshFilter = GetComponent<MeshFilter>();

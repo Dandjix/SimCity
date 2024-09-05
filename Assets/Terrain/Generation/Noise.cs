@@ -23,8 +23,6 @@ public static class Noise
             offsetByOctave[i] = new Vector2(offsetX, offsetY);
         }
 
-        float min = int.MaxValue;
-        float max = int.MinValue;
         for (int x = 0; x < sizeY+1; x++)
         {
             for (int y = 0; y < sizeX+1; y++)
@@ -45,17 +43,15 @@ public static class Noise
                     amplitude *= persistence;
                     frequency *= lacunarity;
                 }
-
-                //+ perlinOffset.y;
-                //i have no clue why i gotta divide but it doesnt work otherwise
-                if(height < min)
-                    min = height;
-                if(height > max) 
-                    max = height;
-
                 heights[x, y] = height;
             }
         }
+        float endAmplitude = EndAmplitude(octaves,persistence);
+
+        float min = 1-endAmplitude;
+        float max = endAmplitude;
+
+
         for (int x = 0; x < sizeY+1; x++)
         {
             for (int y = 0; y < sizeX+1; y++)
@@ -64,5 +60,11 @@ public static class Noise
             }
         }
         return heights;
+    }
+
+    private static float EndAmplitude(int octaves,float persistence)
+    {
+        float amplitude = Mathf.Pow(persistence,octaves);
+        return amplitude;
     }
 }
