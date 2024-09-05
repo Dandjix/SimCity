@@ -12,12 +12,15 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private TerrainDisplay display;
 
 
-    public void Generate(int seed, float scale,int octaves, float persistence, float lacunarity, Vector2 offset, Vector2Int size,Material material)
+    public void Generate(float[,] heights,
+        float heightMultiplier,
+        AnimationCurve heightCurve,
+        Material material)
     {
-        var heights = Noise.GenerateHeights(size.x, size.y, seed, scale, octaves, persistence, lacunarity, offset);
+        //var heights = Noise.GenerateHeights(size.x, size.y, seed, scale, octaves, persistence, lacunarity,minHeight,maxHeight, offset);
 
-        Texture2D texture = painter.GenerateTexture(heights,size.x+1,size.y+1);
-        TerrainMeshData meshData = MeshGenerator.GenerateTerrainMeshData(heights);
+        Texture2D texture = painter.GenerateTexture(heights, heights.GetLength(0), heights.GetLength(1));
+        TerrainMeshData meshData = MeshGenerator.GenerateTerrainMeshData(heights, heightMultiplier, heightCurve);
 
         display.DrawMesh(meshData, texture, material);
     }
