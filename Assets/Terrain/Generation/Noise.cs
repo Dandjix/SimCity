@@ -25,9 +25,9 @@ public static class Noise
 
         float min = int.MaxValue;
         float max = int.MinValue;
-        for (int x = 0; x < sizeY; x++)
+        for (int x = 0; x < sizeY+1; x++)
         {
-            for (int y = 0; y < sizeX; y++)
+            for (int y = 0; y < sizeX+1; y++)
             {
                 float height = 0;
                 float amplitude = 1;
@@ -52,12 +52,13 @@ public static class Noise
                     min = height;
                 if(height > max) 
                     max = height;
+
                 heights[x, y] = height;
             }
         }
-        for (int x = 0; x < sizeY; x++)
+        for (int x = 0; x < sizeY+1; x++)
         {
-            for (int y = 0; y < sizeX; y++)
+            for (int y = 0; y < sizeX+1; y++)
             {
                 heights[x, y] = Mathf.InverseLerp(min, max, heights[x,y]);
             }

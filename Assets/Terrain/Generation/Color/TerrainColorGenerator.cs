@@ -5,9 +5,6 @@ using UnityEngine;
 [ExecuteAlways]
 public class TerrainColorGenerator : MonoBehaviour
 {
-    [SerializeField] private TerrainType[] terrainTypes;
-
-
     public void CreateMesh()
     {
 
@@ -17,6 +14,7 @@ public class TerrainColorGenerator : MonoBehaviour
     {
         Color[] colorMap = new Color[width * length];
 
+        var terrainTypes = TerrainTypesBank.Instance.TerrainTypes;
 
         System.Array.Sort(terrainTypes, (a, b) => a.height.CompareTo(b.height));
 
@@ -32,7 +30,7 @@ public class TerrainColorGenerator : MonoBehaviour
                         //Debug.Log("x : " + x + "l 0 : " + heights.GetLength(0));
                         //Debug.Log("y : " + y + "l 1 : " + heights.GetLength(1));
                         //Debug.Log("cmap : " + colorMap.Length);
-                        colorMap[x * heights.GetLength(1) + y] = color;
+                        colorMap[x * width + y] = color;
                         break;
                     }
                 }
