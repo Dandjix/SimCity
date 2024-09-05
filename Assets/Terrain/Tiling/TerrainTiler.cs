@@ -8,7 +8,7 @@ public class TerrainTiler : MonoBehaviour
     [SerializeField] int chunkSizeX = 128;
     [SerializeField] int chunkSizeY = 128;
 
-    [SerializeField] public MapGrid mapGrid;
+    [SerializeField] private MapGrid mapGrid;
 
     [SerializeField] public int seed;
 
@@ -21,8 +21,10 @@ public class TerrainTiler : MonoBehaviour
     [Range(0, 1)][SerializeField] public float persistence;
     [Min(1)][SerializeField] public float lacunarity;
 
-    [SerializeField] private GameObject[] generators = new GameObject[0];
+    [SerializeField] private GeneratorData[] generatorsData = new GeneratorData[0];
     //public Vector2 offset;
+
+    [SerializeField] private Material baseMaterial;
 
     public bool autoUpdate = false;
 
@@ -32,8 +34,8 @@ public class TerrainTiler : MonoBehaviour
 
 
 
-        Vector3 BLCorner = MapGrid.Instance.getCorner(CardinalDirection.SouthWest, true);
-        Vector3 TRCorner = MapGrid.Instance.getCorner(CardinalDirection.NorthEast, true);
+        Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
+        Vector3 TRCorner = mapGrid.getCorner(CardinalDirection.NorthEast, true);
 
         int totalX = (int)(BLCorner.x - TRCorner.x);
         int totalY = (int)(BLCorner.y - TRCorner.y);
@@ -44,11 +46,12 @@ public class TerrainTiler : MonoBehaviour
         int numberOnX = 4;
         int numberOnY = 4;
 
-        foreach (var generator in generators)
+        foreach (var generator in generatorsData)
         {
-            DestroyImmediate(generator);
+            DestroyImmediate(generator.generator);
+            DestroyImmediate(generator.material);
         }
-        generators = new GameObject[numberOnX * numberOnY];
+        generatorsData = new GeneratorData[numberOnX * numberOnY];
 
         Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
@@ -61,11 +64,29 @@ public class TerrainTiler : MonoBehaviour
                 GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
                 generator.transform.parent = transform;
                 generator.transform.position = position;
-                generators[i * numberOnX + j] = generator;
-                generator.GetComponent<TerrainGenerator>().Generate(seed,scale,octaves,persistence,lacunarity,offset,new Vector2Int(chunkSizeX,chunkSizeY));
+
+
+                Material material = new Material(baseMaterial);
+
+                GeneratorData data = new GeneratorData();
+                data.generator = generator;
+                data.material = material;
+
+                //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
+                generatorsData[i * numberOnX + j] = data;
+                 
+
+                generator.GetComponent<TerrainGenerator>().Generate(seed,scale,octaves,persistence,lacunarity,offset,new Vector2Int(chunkSizeX,chunkSizeY),material);
             }
         }
 
         Debug.Log("Done.");
     }
+}
+
+[System.Serializable]
+struct GeneratorData
+{
+    public GameObject generator;
+    public Material material;
 }

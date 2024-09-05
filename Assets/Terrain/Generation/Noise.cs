@@ -64,7 +64,7 @@ public static class Noise
 
     private static float EndAmplitude(int octaves,float persistence)
     {
-        float amplitude = Mathf.Pow(persistence,octaves);
+        float amplitude = Mathf.Pow(persistence,octaves+1);
         return amplitude;
     }
 }
