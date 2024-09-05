@@ -3,22 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class NoiseTerrainScript : MonoBehaviour
+[RequireComponent(typeof(TerrainPainter))]
+public class TerrainGenerator : MonoBehaviour
 {
-    private Terrain terrain;
+    private MeshRenderer meshRenderer;
+
+    private TerrainPainter painter;
 
     [SerializeField] private MapGrid mapGrid;
+
+    [SerializeField] int seed;
 
     [SerializeField] private float height = 20;
     [SerializeField] private float heightOffset = -4;
 
-    public Vector2 perlinOffset = Vector2.zero;
-    public float scale = 20;
+    [Min(1)] [SerializeField] private float scale = 20;
+
+    [SerializeField] private int octaves;
+    [Range(0,1)][SerializeField] private float persistence;
+    [Min(1)][SerializeField] private float lacunarity;
+
+    private TerrainDisplay display;
+
+    public Vector2 offset;
+
+    public bool autoUpdate = false;
 
     private void Start()
     {
-
-        terrain = GetComponent<Terrain>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        painter = GetComponent<TerrainPainter>();
         //Debug.Log("in awake : " + terrain);
     }
 
@@ -61,52 +75,15 @@ public class NoiseTerrainScript : MonoBehaviour
         terrain.terrainData = GenerateTerrainData(terrain.terrainData);
     }
 
-    private TerrainData GenerateTerrainData(TerrainData terrainData)
+    private void GenerateTerrainData()
     {
         Vector2Int size = GetSize();
 
         transform.position = GetPosition();
 
-        Vector2Int extendedSize = GetExtendedSize();
-        //Debug.Log("extended size : " + extendedSize);
-        int resolution = Mathf.Max(extendedSize.x, extendedSize.y);
-        terrainData.heightmapResolution = resolution;
+        var heights = Noise.GenerateHeights(size.x, size.y, seed, scale, octaves, persistence, lacunarity, offset);
 
-        terrainData.SetHeights(0, 0, GenerateHeights());
-
-        terrainData.size = new Vector3(resolution, height, resolution);
-
-        return terrainData;
-    }
-
-    float[,] GenerateHeights()
-    {
-        Vector2Int size = GetSize();
-        float[,] heights = new float[size.y+1, size.x+1];
-        for (int i = 0; i < size.y; i++)
-        {
-            for (int j = 0; j < size.x; j++)
-            {
-                heights[i, j] = CalculateHeight(j, i);
-            }
-        }
-
-        return heights;
-    }
-
-    float CalculateHeight(int x, int y)
-    {
-        Vector2Int size = GetSize();
-        Vector2Int extendedSize = GetExtendedSize();
-        float xCoord = ((float)x) / (8) * scale + perlinOffset.x;
-        float yCoord = ((float)y) / (8) * scale + perlinOffset.y;
-        //i have no clue why i gotta divide but it doesnt work otherwise
-        return Mathf.PerlinNoise(xCoord, yCoord);
-    }
-    
-    public void Save(string path)
-    {
-
+        painter.Color(heights,size.x,size.y);
     }
 
 

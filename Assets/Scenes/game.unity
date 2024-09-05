@@ -436,9 +436,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19870054e9b04a946ac26bbe51ee4cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dimensionX: 256
+  dimensionX: 32
   dimensionY: 32
-  margin: 0
+  margin: 5
 --- !u!156049354 &565778797
 Grid:
   m_ObjectHideFlags: 0
@@ -985,6 +985,7 @@ GameObject:
   - component: {fileID: 2032072107}
   - component: {fileID: 2032072106}
   - component: {fileID: 2032072110}
+  - component: {fileID: 2032072111}
   m_Layer: 0
   m_Name: Terrain(Perlin)
   m_TagString: Untagged
@@ -1001,7 +1002,7 @@ Transform:
   m_GameObject: {fileID: 2032072103}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: -5, y: -3, z: -5}
   m_LocalScale: {x: 1, y: 3.18, z: 2.24}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1110,10 +1111,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGrid: {fileID: 565778796}
-  height: 6
-  heightOffset: -2
-  perlinOffset: {x: 0, y: 0}
-  scale: 1
+  seed: 0
+  height: 10
+  heightOffset: -3
+  scale: 100
+  octaves: 4
+  persistence: 0.5
+  lacunarity: 2
+  offset: {x: -10.34, y: 19.06}
+  autoUpdate: 1
+--- !u!114 &2032072111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032072103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06bf4edd680d47946bf7dbbd9e094979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainTypes: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

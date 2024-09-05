@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class MeshGenerator
+{
+    public static TerrainMeshData GenerateTerrainMeshData(float[,] heightMap)
+    {
+        int width = heightMap.GetLength(0);
+        int length = heightMap.GetLength(1);
+
+        TerrainMeshData terrainMeshData = new TerrainMeshData(width, length);
+        int vertexIndex = 0;
+        for (int y = 0; y < length; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                terrainMeshData.vertices[vertexIndex] = new Vector3(x, heightMap[x, y], y);
+                terrainMeshData.uvs[vertexIndex] = new Vector2(x/(float)width, y/(float)length);
+                if(x<width-1 && y<length-1)
+                {
+                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+1,vertexIndex+width+1);
+                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+width,vertexIndex+width+1);
+                }
+                vertexIndex++;
+            }
+        }
+
+        return terrainMeshData;
+    }
+}
+
+
+public class TerrainMeshData
+{
+    public Vector3[] vertices;
+    public int[] triangles;
+    public Vector2[] uvs;
+
+    public  int triangleIndex = 0;
+
+    public TerrainMeshData(int meshWidth,int meshLength)
+    {
+        vertices = new Vector3[meshLength*meshWidth];
+        uvs = new Vector2[meshLength*meshWidth];
+        triangles = new int[(meshLength-1)*(meshWidth-1)*6];
+    }
+
+    public void AddTriangle(int a,int b, int c)
+    {
+        triangles[triangleIndex] = a;
+        triangles[triangleIndex+1] = b;
+        triangles[triangleIndex+2] = c;
+        triangleIndex += 3;
+    }
+
+    public Mesh CreateMesh()
+    {
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uvs;
+        mesh.RecalculateNormals();
+        return mesh;
+    }
+}
