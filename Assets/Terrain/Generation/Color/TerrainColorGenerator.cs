@@ -18,13 +18,14 @@ public class TerrainColorGenerator : MonoBehaviour
 
         System.Array.Sort(terrainTypes, (a, b) => a.height.CompareTo(b.height));
 
-        for (int x = 0; x < length; x++)
+        for (int x = 0; x < length-1; x++)
         {
-            for (int y = 0; y < width; y++)
+            for (int y = 0; y < width-1; y++)
             {
+                float height = (heights[x, y] + heights[x+1, y] + heights[x, y+1] + heights[x+1, y+1])/4;
                 for (int i = 0; i < terrainTypes.Length; i++)
                 {
-                    if (heights[x, y] <= terrainTypes[i].height)
+                    if (height <= terrainTypes[i].height)
                     {
                         Color color = terrainTypes[i].color;
                         //Debug.Log("x : " + x + "l 0 : " + heights.GetLength(0));

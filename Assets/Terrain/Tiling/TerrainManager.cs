@@ -3,9 +3,38 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 
+/// <summary>
+/// Creates terrain and allows to access the heights.
+/// </summary>
 [ExecuteAlways]
-public class TerrainTiler : MonoBehaviour
+public class TerrainManager : MonoBehaviour
 {
+    public static TerrainManager Instance { get 
+        {
+            if(instance == null)
+                return Object.FindFirstObjectByType<TerrainManager>();
+            return instance;
+        }
+        set
+        {
+            instance = value;
+        } 
+    }
+
+    private static TerrainManager instance;
+
+    private void Start()
+    {
+        instance = this;
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+
+
     [SerializeField] int chunkSizeX = 128;
     [SerializeField] int chunkSizeY = 128;
 
@@ -34,6 +63,13 @@ public class TerrainTiler : MonoBehaviour
     //public Vector2 offset;
 
     [SerializeField] private Material baseMaterial;
+
+    public float[,] Heights { get; private set; }
+
+    public float getHeightAtCenter(int x,int y)
+    {
+        return (Heights[x, y] + Heights[x+1,y] + Heights[x, y+1] + Heights[x+1, y+1])/4;
+    }
 
     public bool autoUpdate = false;
 
@@ -74,7 +110,9 @@ public class TerrainTiler : MonoBehaviour
 
         var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset);
 
-        Debug.Log("lengths : " + globalHeights.GetLength(0) + ", " + globalHeights.GetLength(1));
+        Heights = globalHeights;
+
+        //Debug.Log("lengths : " + globalHeights.GetLength(0) + ", " + globalHeights.GetLength(1));
 
         for (int i = 0; i < numberOnX; i++)
         {
@@ -85,6 +123,7 @@ public class TerrainTiler : MonoBehaviour
                 GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
                 generator.transform.parent = transform;
                 generator.transform.position = position;
+                //generator.layer = LayerMask.NameToLayer("Terrain");
                 //generator.transform.localScale = new Vector3(1,height,1);
 
 
@@ -97,19 +136,21 @@ public class TerrainTiler : MonoBehaviour
                 //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
                 generatorsData[i * numberOnX + j] = data;
 
-                float[,] heights = new float[chunkSizeX+1, chunkSizeY+1];
+                float[,] heightsForChunk = new float[chunkSizeX+1, chunkSizeY+1];
+
+
 
                 for (int x = 0; x < chunkSizeX+1; x++)
                 {
                     for (int y = 0; y < chunkSizeY+1; y++)
                     {
-                        heights[y,x] = globalHeights[j*chunkSizeX +y,i*chunkSizeY+x];
+                        heightsForChunk[y,x] = globalHeights[j*chunkSizeX +y,i*chunkSizeY+x];
                     }
                 }
 
 
                 generator.GetComponent<TerrainGenerator>().Generate(
-                    heights,
+                    heightsForChunk,
                     height,
                     heightCurve,
                     material);

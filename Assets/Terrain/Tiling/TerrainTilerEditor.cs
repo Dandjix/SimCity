@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-[CustomEditor(typeof(TerrainTiler))]
+[CustomEditor(typeof(TerrainManager))]
 public class TerrainTilerEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -11,7 +11,7 @@ public class TerrainTilerEditor : Editor
 
 
 
-        TerrainTiler tiler = (TerrainTiler)target;
+        TerrainManager tiler = (TerrainManager)target;
 
             if (DrawDefaultInspector() && tiler.autoUpdate)
             {

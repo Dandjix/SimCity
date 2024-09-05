@@ -18,7 +18,8 @@ public class TestGrid : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,100))
+        LayerMask layerMask = LayerMask.NameToLayer("Terrain");
+        if(Physics.Raycast(ray,out hit,100, layerMask))
         {
             Vector3 hitPositon = hit.point;
             //Debug.Log("hitPos : " + hitPositon);
