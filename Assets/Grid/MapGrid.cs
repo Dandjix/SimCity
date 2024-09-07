@@ -20,6 +20,8 @@ public class MapGrid : MonoBehaviour
     [SerializeField] [Range(32,500)] private int dimensionY = 100;
     public int DimensionY { get { return dimensionY; } }
 
+    [SerializeField] private float gizmosHeight;
+
     private Vector2 cellDimensions = new Vector2(1, 1);
     //public Vector2 CellDimensions { get {  return cellDimensions; } }
 
@@ -278,8 +280,8 @@ public class MapGrid : MonoBehaviour
             xEast = cellDimensions.x * dimensionX + margin;
             y = i * cellDimensions.y;
 
-            Vector3 from = new Vector3(xWest, 0, y);
-            Vector3 to = new Vector3(xEast, 0, y);
+            Vector3 from = new Vector3(xWest, gizmosHeight, y);
+            Vector3 to = new Vector3(xEast, gizmosHeight, y);
 
             Gizmos.DrawLine(from, to);
         }
@@ -293,6 +295,16 @@ public class MapGrid : MonoBehaviour
         Vector3 northWestWithMargin = getCornerWithMargin(CardinalDirection.NorthWest);
         Vector3 northEastWithMargin = getCornerWithMargin(CardinalDirection.NorthEast);
         Vector3 southEastWithMargin = getCornerWithMargin(CardinalDirection.SouthEast);
+
+        southWest.y = gizmosHeight;
+        northWest.y = gizmosHeight;
+        northEast.y = gizmosHeight;
+        southEast.y = gizmosHeight;
+
+        southWestWithMargin.y = gizmosHeight;
+        northWestWithMargin.y = gizmosHeight;
+        northEastWithMargin.y = gizmosHeight;
+        southEastWithMargin.y = gizmosHeight;
 
         Gizmos.color = Color.yellow;
 
