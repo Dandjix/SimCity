@@ -23,14 +23,10 @@ public class TerrainManager : MonoBehaviour
 
     private static TerrainManager instance;
 
-    private void Start()
-    {
-        instance = this;
-    }
-
     private void Awake()
     {
         instance = this;
+        Generate();
     }
 
 
@@ -66,9 +62,21 @@ public class TerrainManager : MonoBehaviour
 
     public float[,] Heights { get; private set; }
 
-    public float getHeightAtCenter(int x,int y)
+    public float GetHeightAtCenter(Vector2Int square)
     {
-        return (Heights[x, y] + Heights[x+1,y] + Heights[x, y+1] + Heights[x+1, y+1])/4;
+        return GetHeightAtCenter(square.x,square.y);
+    }
+
+
+    public float GetHeightAtCenter(int x,int y)
+    {
+        float h = (Heights[x, y] + Heights[x + 1, y] + Heights[x, y + 1] + Heights[x + 1, y + 1]) / 4;
+
+        h = heightCurve.Evaluate(h) * height + heightOffset;
+
+        //h *= height;
+        //h += heightOffset;
+        return h;
     }
 
     public bool autoUpdate = false;

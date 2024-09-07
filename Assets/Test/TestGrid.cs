@@ -12,27 +12,32 @@ public class TestGrid : MonoBehaviour
     {
         mapGrid = MapGrid.Instance;
 
-        mapGrid.GetAllSquares();
+
+        foreach(var square in mapGrid.GetAllSquares())
+        {
+            Vector3 center = MapGrid.Instance.getCenter(square);
+            var marker2 = Instantiate(marker);
+            marker2.transform.position = center;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        //LayerMask layerMask = LayerMask.NameToLayer("Terrain");
-        if(Physics.Raycast(ray,out hit,100))
-        {
-            //Debug.Log("hit !");
-            Vector3 hitPositon = hit.point;
-            //Debug.Log("hitPos : " + hitPositon);
-            Vector2 SquarePosition = mapGrid.getSquare(hitPositon,false);
-            //Debug.Log("SquarePos : "+SquarePosition);
-            Vector3 center = mapGrid.getCenter(SquarePosition);
-            //Debug.Log("center : " + center);
-            marker.transform.position = new Vector3(center.x,marker.transform.position.y,center.z);
-        }
-        //else
-        //Debug.Log("no hit");
-    }
+    //void Update()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //    RaycastHit hit;
+    //    //LayerMask layerMask = LayerMask.NameToLayer("Terrain");
+    //    if(Physics.Raycast(ray,out hit,100))
+    //    {
+    //        //Debug.Log("hit !");
+    //        Vector3 hitPositon = hit.point;
+    //        //Debug.Log("hitPos : " + hitPositon);
+    //        Vector2 SquarePosition = mapGrid.getSquare(hitPositon,false);
+    //        //Debug.Log("SquarePos : "+SquarePosition);
+    //        Vector3 center = mapGrid.getCenter(SquarePosition);
+    //        //Debug.Log("center : " + center);
+    //        marker.transform.position = new Vector3(center.x,marker.transform.position.y,center.z);
+    //    }
+    //    //else
+    //    //Debug.Log("no hit");
+    //}
 }

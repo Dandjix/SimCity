@@ -199,12 +199,28 @@ public class MapGrid : MonoBehaviour
 
         return new Vector2Int(x, y);
     }
-
-    public Vector3 getCenter(Vector2 square)
+    /// <summary>
+    /// not taking into account the height
+    /// </summary>
+    /// <param name="square"></param>
+    /// <returns></returns>
+    public Vector2 getCenterNoHeight(Vector2Int square)
     {
         float x = square.x*cellDimensions.x + cellDimensions.x/2;
         float y = square.y*cellDimensions.y + cellDimensions.y/2;
-        return new Vector3(x,0,y);
+        return new Vector2(x,y);
+    }
+    /// <summary>
+    /// with height taken into account. This probably should only be called at runtime
+    /// </summary>
+    /// <param name="square"></param>
+    /// <returns></returns>
+    public Vector3 getCenter(Vector2Int square)
+    {
+        float x = square.x * cellDimensions.x + cellDimensions.x / 2;
+        float y = square.y * cellDimensions.y + cellDimensions.y / 2;
+        float height = TerrainManager.Instance.GetHeightAtCenter(square);
+        return new Vector3(x,height, y);
     }
 
     /// <summary>
