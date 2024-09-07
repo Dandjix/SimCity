@@ -11,6 +11,8 @@ public class TestGrid : MonoBehaviour
     void Start()
     {
         mapGrid = MapGrid.Instance;
+
+        mapGrid.GetAllSquares();
     }
 
     // Update is called once per frame
@@ -18,9 +20,10 @@ public class TestGrid : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        LayerMask layerMask = LayerMask.NameToLayer("Terrain");
-        if(Physics.Raycast(ray,out hit,100, layerMask))
+        //LayerMask layerMask = LayerMask.NameToLayer("Terrain");
+        if(Physics.Raycast(ray,out hit,100))
         {
+            //Debug.Log("hit !");
             Vector3 hitPositon = hit.point;
             //Debug.Log("hitPos : " + hitPositon);
             Vector2 SquarePosition = mapGrid.getSquare(hitPositon,false);
@@ -29,5 +32,7 @@ public class TestGrid : MonoBehaviour
             //Debug.Log("center : " + center);
             marker.transform.position = new Vector3(center.x,marker.transform.position.y,center.z);
         }
+        //else
+        //Debug.Log("no hit");
     }
 }

@@ -11,7 +11,7 @@ public static class Noise
     public static float[,] GenerateHeights(int sizeX, int sizeY, int seed, float scale, int octaves ,float persistence,float lacunarity, float minHeight, float maxHeight,Vector2 offset)
     {
         //Vector2Int size = GetSize();
-        float[,] heights = new float[sizeY, sizeX];
+        float[,] heights = new float[sizeX, sizeY];
 
         Vector2[] offsetByOctave = new Vector2[octaves];
         System.Random prng = new System.Random(seed); 
@@ -23,9 +23,9 @@ public static class Noise
             offsetByOctave[i] = new Vector2(offsetX, offsetY);
         }
 
-        for (int x = 0; x < sizeY; x++)
+        for (int x = 0; x < sizeX; x++)
         {
-            for (int y = 0; y < sizeX; y++)
+            for (int y = 0; y < sizeY; y++)
             {
                 float height = 0;
                 float amplitude = 1;
@@ -52,9 +52,9 @@ public static class Noise
         //float max = 100;
 
 
-        for (int x = 0; x < sizeY; x++)
+        for (int x = 0; x < sizeX; x++)
         {
-            for (int y = 0; y < sizeX; y++)
+            for (int y = 0; y < sizeY; y++)
             {
                 heights[x, y] = Mathf.InverseLerp(minHeight, maxHeight, heights[x,y]);
             }

@@ -6,22 +6,22 @@ public static class MeshGenerator
 {
     public static TerrainMeshData GenerateTerrainMeshData(float[,] heightMap,float heightMultiplier, AnimationCurve heightCurve)
     {
-        int width = heightMap.GetLength(0);
-        int length = heightMap.GetLength(1);
+        int xSize = heightMap.GetLength(0);
+        int ySize = heightMap.GetLength(1);
 
-        TerrainMeshData terrainMeshData = new TerrainMeshData(length, width);
+        TerrainMeshData terrainMeshData = new TerrainMeshData(xSize, ySize);
         int vertexIndex = 0;
-        for (int y = 0; y < width; y++)
+        for (int x = 0; x < xSize; x++)
         {
-            for (int x = 0; x < length; x++)
+            for (int y = 0; y < ySize; y++)
             {
-                float height = heightCurve.Evaluate(heightMap[y, x])*heightMultiplier;
+                float height = heightCurve.Evaluate(heightMap[x, y])*heightMultiplier;
                 terrainMeshData.vertices[vertexIndex] = new Vector3(x, height, y);
-                terrainMeshData.uvs[vertexIndex] = new Vector2(x/(float)length, y/(float)length);
-                if(x<length-1 && y<width-1)
+                terrainMeshData.uvs[vertexIndex] = new Vector2(x/(float)xSize, y/(float)ySize);
+                if(x<xSize-1 && y<ySize-1)
                 {
-                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+length+1, vertexIndex + 1);
-                    terrainMeshData.AddTriangle(vertexIndex,vertexIndex+length,vertexIndex+length+1);
+                    terrainMeshData.AddTriangle(vertexIndex+xSize+1, vertexIndex, vertexIndex + 1);
+                    terrainMeshData.AddTriangle(vertexIndex+xSize, vertexIndex, vertexIndex +xSize +1);
                 }
                 vertexIndex++;
             }

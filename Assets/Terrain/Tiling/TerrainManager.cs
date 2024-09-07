@@ -119,7 +119,7 @@ public class TerrainManager : MonoBehaviour
             for (int j = 0; j < numberOnY; j++)
             {
                 Vector3 position = new Vector3(BLCorner.x + i * chunkSizeX,heightOffset, BLCorner.z + j * chunkSizeY);
-                Vector2 offset = new Vector2((position.z),(position.x));
+                //Vector2 offset = new Vector2((position.z),(position.x));
                 GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
                 generator.transform.parent = transform;
                 generator.transform.position = position;
@@ -134,7 +134,7 @@ public class TerrainManager : MonoBehaviour
                 data.material = material;
 
                 //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
-                generatorsData[i * numberOnX + j] = data;
+                generatorsData[j * numberOnX + i] = data;
 
                 float[,] heightsForChunk = new float[chunkSizeX+1, chunkSizeY+1];
 
@@ -144,7 +144,7 @@ public class TerrainManager : MonoBehaviour
                 {
                     for (int y = 0; y < chunkSizeY+1; y++)
                     {
-                        heightsForChunk[y,x] = globalHeights[j*chunkSizeX +y,i*chunkSizeY+x];
+                        heightsForChunk[x,y] = globalHeights[i*chunkSizeX +x,j*chunkSizeY+y];
                     }
                 }
 

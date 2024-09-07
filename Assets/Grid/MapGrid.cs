@@ -26,7 +26,7 @@ public class MapGrid : MonoBehaviour
     [SerializeField] private int margin = 5;
     public int Margin { get { return margin; } }
 
-    public System.Collections.Generic.IEnumerable<Vector2> AllSquaresCenter(bool withMargin = false)
+    public IEnumerable<Vector2> GetAllSquaresCenter(bool withMargin = false)
     {
         float xOffset = cellDimensions.x / 2;
         float yOffset = cellDimensions.y / 2;
@@ -50,7 +50,32 @@ public class MapGrid : MonoBehaviour
                 }
             }
         }
+    }
 
+    public IEnumerable<Vector2Int> GetAllSquares(bool withMargin = false)
+    {
+        float xOffset = cellDimensions.x / 2;
+        float yOffset = cellDimensions.y / 2;
+        if (withMargin)
+        {
+            for (int i = -margin; i < dimensionX + margin; i++)
+            {
+                for (int j = -margin; j < dimensionY + margin; j++)
+                {
+                    yield return new Vector2Int(i, j);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < dimensionX; i++)
+            {
+                for (int j = 0; j < dimensionY; j++)
+                {
+                    yield return new Vector2Int(i, j);
+                }
+            }
+        }
     }
 
     public Vector3 getCorner(CardinalDirection cardinalDirection,bool includeMargin=false)
