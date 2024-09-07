@@ -70,6 +70,9 @@ public class TerrainManager : MonoBehaviour
 
     public float GetHeightAtCenter(int x,int y)
     {
+        x += mapGrid.Margin;
+        y += mapGrid.Margin;
+
         float h = (Heights[x, y] + Heights[x + 1, y] + Heights[x, y + 1] + Heights[x + 1, y + 1]) / 4;
 
         h = heightCurve.Evaluate(h) * height + heightOffset;
