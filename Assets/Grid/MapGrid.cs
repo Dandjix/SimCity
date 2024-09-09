@@ -15,9 +15,15 @@ public class MapGrid : MonoBehaviour
 
     //[SerializeField] private Vector2Int dimensions = new Vector2Int(100, 100);
     [SerializeField] [Range(32,500)] private int dimensionX = 100;
+    /// <summary>
+    /// the x dimension of the grid, without the margin
+    /// </summary>
     public int DimensionX { get { return dimensionX; } }
         
     [SerializeField] [Range(32,500)] private int dimensionY = 100;
+    /// <summary>
+    /// the y dimension of the grid, without the margin
+    /// </summary>
     public int DimensionY { get { return dimensionY; } }
 
     [SerializeField] private float gizmosHeight;
@@ -25,7 +31,7 @@ public class MapGrid : MonoBehaviour
     private Vector2 cellDimensions = new Vector2(1, 1);
     //public Vector2 CellDimensions { get {  return cellDimensions; } }
 
-    [SerializeField] private int margin = 5;
+    [SerializeField][Min(1)] private int margin = 5;
     public int Margin { get { return margin; } }
 
     public IEnumerable<Vector2> GetAllSquaresCenter(bool withMargin = false)
@@ -267,8 +273,8 @@ public class MapGrid : MonoBehaviour
             yNorth = cellDimensions.y*dimensionY + margin;
             x = i*cellDimensions.x;
 
-            Vector3 from = new Vector3(x,0,ySouth);
-            Vector3 to = new Vector3(x,0, yNorth);
+            Vector3 from = new Vector3(x,gizmosHeight,ySouth);
+            Vector3 to = new Vector3(x,gizmosHeight, yNorth);
 
             Gizmos.DrawLine(from,to);
         }
@@ -300,7 +306,7 @@ public class MapGrid : MonoBehaviour
         northWest.y = gizmosHeight;
         northEast.y = gizmosHeight;
         southEast.y = gizmosHeight;
-
+        
         southWestWithMargin.y = gizmosHeight;
         northWestWithMargin.y = gizmosHeight;
         northEastWithMargin.y = gizmosHeight;

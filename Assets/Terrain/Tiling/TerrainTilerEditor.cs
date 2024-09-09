@@ -13,10 +13,10 @@ public class TerrainTilerEditor : Editor
 
         TerrainManager tiler = (TerrainManager)target;
 
-            if (DrawDefaultInspector() && tiler.autoUpdate)
-            {
-                tiler.Generate();
-            }
+        if (DrawDefaultInspector() && tiler.autoUpdate)
+        {
+            tiler.Generate();
+        }
 
         if (GUILayout.Button("Generate"))
         {
