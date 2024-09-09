@@ -21,7 +21,7 @@ public class PathGrid : MonoBehaviour
 
     [SerializeField] private Variant[] variants;
     [SerializeField] private HeightType heightType;
-    [SerializeField] private float height;
+    [SerializeField] private float heightOffset;
 }
 
 [Serializable]
@@ -33,7 +33,7 @@ struct Variant
 
 enum HeightType
 {
-    number,
+    world,
     terrain
 }
 
