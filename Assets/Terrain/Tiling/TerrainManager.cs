@@ -56,7 +56,7 @@ public class TerrainManager : MonoBehaviour
     public Vector2 globalOffset = Vector2.zero;
 
 
-    [SerializeField] private GeneratorData[] generatorsData = new GeneratorData[0];
+    [SerializeField][HideInInspector] private GeneratorData[] generatorsData = new GeneratorData[0];
     //public Vector2 offset;
 
     [SerializeField] private Material baseMaterial;
