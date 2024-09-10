@@ -8,18 +8,18 @@ public class TestGrid : MonoBehaviour
     [SerializeField] private GameObject marker;
     //private MapGrid mapGrid;
     // Start is called before the first frame update
-    void Start()
-    {
-        var mapGrid = MapGrid.Instance;
+    //void Start()
+    //{
+    //    var mapGrid = MapGrid.Instance;
 
 
-        foreach (var square in mapGrid.GetAllSquares())
-        {
-            Vector3 center = MapGrid.Instance.getCenter(square);
-            var marker2 = Instantiate(marker);
-            marker2.transform.position = center;
-        }
-    }
+    //    foreach (var square in mapGrid.GetAllSquares())
+    //    {
+    //        Vector3 center = MapGrid.Instance.getCenter(square);
+    //        var marker2 = Instantiate(marker);
+    //        marker2.transform.position = center;
+    //    }
+    //}
 
     void Update()
     {
