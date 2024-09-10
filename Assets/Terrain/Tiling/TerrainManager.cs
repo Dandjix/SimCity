@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,7 +13,7 @@ public class TerrainManager : MonoBehaviour
     public static TerrainManager Instance { get 
         {
             if(instance == null)
-                return Object.FindFirstObjectByType<TerrainManager>();
+                return UnityEngine.Object.FindFirstObjectByType<TerrainManager>();
             return instance;
         }
         set
@@ -119,7 +120,13 @@ public class TerrainManager : MonoBehaviour
 
         //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
-        var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
+        //var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
+        //    heightCurve, heightOffset, height);
+
+        var globalHeights = Noise.GenerateHeights(
+            chunkSizeX * numberOnX + 1,
+            chunkSizeY * numberOnY + 1,
+            seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
         Heights = globalHeights;
@@ -148,15 +155,23 @@ public class TerrainManager : MonoBehaviour
                 //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
                 generatorsData[j * numberOnX + i] = data;
 
-                float[,] heightsForChunk = new float[chunkSizeX+1, chunkSizeY+1];
+                float[,] heightsForChunk = new float[chunkSizeX+3, chunkSizeY+3];
 
 
 
-                for (int x = 0; x < chunkSizeX+1; x++)
+                for (int x = 0; x < heightsForChunk.GetLength(0); x++)
                 {
-                    for (int y = 0; y < chunkSizeY+1; y++)
+                    for (int y = 0; y < heightsForChunk.GetLength(1); y++)
                     {
-                        heightsForChunk[x,y] = globalHeights[i*chunkSizeX +x,j*chunkSizeY+y];
+                        try
+                        {
+                            heightsForChunk[x, y] = globalHeights[i * (chunkSizeX ) + x , j * (chunkSizeY) + y];
+                        }
+                        catch(Exception e )
+                        {
+                            heightsForChunk[x, y] = 0;
+                        }
+
                     }
                 }
 

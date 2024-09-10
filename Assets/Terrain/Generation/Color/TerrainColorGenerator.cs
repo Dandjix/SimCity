@@ -22,7 +22,8 @@ public class TerrainColorGenerator : MonoBehaviour
         {
             for (int y = 0; y < ySize-1; y++)
             {
-                float height = (heights[x, y] + heights[x+1, y] + heights[x, y+1] + heights[x+1, y+1])/4;
+                //float height = (heights[x, y] + heights[x+1, y] + heights[x, y+1] + heights[x+1, y+1])/4;
+                float height = heights[x, y];
                 for (int i = 0; i < terrainTypes.Length; i++)
                 {
                     if (height <= terrainTypes[i].height)

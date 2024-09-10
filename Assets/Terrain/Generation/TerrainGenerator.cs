@@ -17,7 +17,8 @@ public class TerrainGenerator : MonoBehaviour
     {
         //var heights = Noise.GenerateHeights(size.x, size.y, seed, scale, octaves, persistence, lacunarity,minHeight,maxHeight, offset);
 
-        Texture2D texture = painter.GenerateTexture(heights, heights.GetLength(0), heights.GetLength(1));
+        //Texture2D texture = painter.GenerateTexture(heights, heights.GetLength(0)+2, heights.GetLength(1)+2);
+        Texture2D texture = null;
         TerrainMeshData meshData = MeshGenerator.GenerateTerrainMeshData(heights);
 
         display.DrawMesh(meshData, texture, material);
