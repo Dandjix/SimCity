@@ -124,8 +124,8 @@ public class TerrainManager : MonoBehaviour
         //    heightCurve, heightOffset, height);
 
         var globalHeights = Noise.GenerateHeights(
-            chunkSizeX * numberOnX + 1,
-            chunkSizeY * numberOnY + 1,
+            chunkSizeX * numberOnX + 3,
+            chunkSizeY * numberOnY + 3,
             seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
@@ -163,14 +163,14 @@ public class TerrainManager : MonoBehaviour
                 {
                     for (int y = 0; y < heightsForChunk.GetLength(1); y++)
                     {
-                        try
-                        {
+                        //try
+                        //{
                             heightsForChunk[x, y] = globalHeights[i * (chunkSizeX ) + x , j * (chunkSizeY) + y];
-                        }
-                        catch(Exception e )
-                        {
-                            heightsForChunk[x, y] = 0;
-                        }
+                        //}
+                        //catch(Exception e )
+                        //{
+                        //    heightsForChunk[x, y] = 0;
+                        //}
 
                     }
                 }
