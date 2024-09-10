@@ -75,8 +75,8 @@ public class TerrainManager : MonoBehaviour
 
         float h = (Heights[x, y] + Heights[x + 1, y] + Heights[x, y + 1] + Heights[x + 1, y + 1]) / 4;
 
-        h = heightCurve.Evaluate(h) * height + heightOffset;
-
+        //h = heightCurve.Evaluate(h) * height + heightOffset;
+        //h = height;
         //h *= height;
         //h += heightOffset;
         return h;
@@ -107,8 +107,8 @@ public class TerrainManager : MonoBehaviour
 
         foreach (var generator in generatorsData)
         {
-            DestroyImmediate(generator.generator);
             DestroyImmediate(generator.material);
+            DestroyImmediate(generator.generator);
         }
 
         foreach(Transform generator in transform)
@@ -119,7 +119,8 @@ public class TerrainManager : MonoBehaviour
 
         //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
-        var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset);
+        var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
+            heightCurve, heightOffset, height);
 
         Heights = globalHeights;
 
@@ -129,7 +130,7 @@ public class TerrainManager : MonoBehaviour
         {
             for (int j = 0; j < numberOnY; j++)
             {
-                Vector3 position = new Vector3(BLCorner.x + i * chunkSizeX,heightOffset, BLCorner.z + j * chunkSizeY);
+                Vector3 position = new Vector3(BLCorner.x + i * chunkSizeX,0, BLCorner.z + j * chunkSizeY);
                 //Vector2 offset = new Vector2((position.z),(position.x));
                 GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
                 generator.transform.parent = transform;
@@ -162,8 +163,6 @@ public class TerrainManager : MonoBehaviour
 
                 generator.GetComponent<TerrainGenerator>().Generate(
                     heightsForChunk,
-                    height,
-                    heightCurve,
                     material);
             }
         }

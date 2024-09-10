@@ -8,7 +8,8 @@ public static class Noise
     //private static readonly Vector2 perlinOffset = Vector2.zero;
     //private static readonly float scale = 20f;
 
-    public static float[,] GenerateHeights(int sizeX, int sizeY, int seed, float scale, int octaves ,float persistence,float lacunarity, float minHeight, float maxHeight,Vector2 offset)
+    public static float[,] GenerateHeights(int sizeX, int sizeY, int seed, float scale, int octaves ,float persistence,float lacunarity, float minHeight, float maxHeight,Vector2 offset
+        , AnimationCurve heightCurve, float heightOffset, float heightMultiplier)
     {
         //Vector2Int size = GetSize();
         float[,] heights = new float[sizeX, sizeY];
@@ -38,12 +39,15 @@ public static class Noise
 
                     float perlinValue = Mathf.PerlinNoise(xCoord, yCoord);
 
+
+
                     height += perlinValue*amplitude;
 
                     amplitude *= persistence;
                     frequency *= lacunarity;
                 }
                 heights[x, y] = height;
+
             }
         }
         float endAmplitude = EndAmplitude(octaves,persistence);
@@ -56,7 +60,8 @@ public static class Noise
         {
             for (int y = 0; y < sizeY; y++)
             {
-                heights[x, y] = Mathf.InverseLerp(minHeight, maxHeight, heights[x,y]);
+                float h = Mathf.InverseLerp(minHeight, maxHeight, heights[x, y]);
+                heights[x, y] = heightCurve.Evaluate(h) * heightMultiplier + heightOffset;
             }
         }
         return heights;
