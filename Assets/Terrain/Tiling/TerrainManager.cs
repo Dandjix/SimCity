@@ -68,13 +68,17 @@ public class TerrainManager : MonoBehaviour
         return GetHeightAtCenter(square.x,square.y);
     }
 
+    public float GetHeightAtBottomLeft(int x,int y)
+    {
+        return Heights[x+1,y+1];
+    }
 
     public float GetHeightAtCenter(int x,int y)
     {
         x += mapGrid.Margin;
         y += mapGrid.Margin;
 
-        float h = (Heights[x, y] + Heights[x + 1, y] + Heights[x, y + 1] + Heights[x + 1, y + 1]) / 4;
+        float h = (GetHeightAtBottomLeft(x, y) + GetHeightAtBottomLeft(x + 1, y) + GetHeightAtBottomLeft(x, y + 1) + GetHeightAtBottomLeft(x + 1, y + 1)) / 4;
 
         //h = heightCurve.Evaluate(h) * height + heightOffset;
         //h = height;
@@ -163,15 +167,7 @@ public class TerrainManager : MonoBehaviour
                 {
                     for (int y = 0; y < heightsForChunk.GetLength(1); y++)
                     {
-                        //try
-                        //{
-                            heightsForChunk[x, y] = globalHeights[i * (chunkSizeX ) + x , j * (chunkSizeY) + y];
-                        //}
-                        //catch(Exception e )
-                        //{
-                        //    heightsForChunk[x, y] = 0;
-                        //}
-
+                        heightsForChunk[x, y] = globalHeights[i * (chunkSizeX ) + x , j * (chunkSizeY) + y];
                     }
                 }
 
