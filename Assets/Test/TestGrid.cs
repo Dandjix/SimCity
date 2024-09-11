@@ -31,7 +31,7 @@ public class TestGrid : MonoBehaviour
             //Debug.Log("hit !");
             Vector3 hitPositon = hit.point;
             //Debug.Log("hitPos : " + hitPositon);
-            Vector2Int SquarePosition = MapGrid.Instance.getSquare(hitPositon, false);
+            Vector2Int SquarePosition = MapGrid.Instance.GetSquare(hitPositon, false);
             //Debug.Log("SquarePos : "+SquarePosition);
             Vector3 center = MapGrid.Instance.getCenter(SquarePosition);
             //Debug.Log("center : " + center);

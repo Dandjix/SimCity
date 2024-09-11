@@ -180,6 +180,11 @@ public class TerrainManager : MonoBehaviour
 
         //Debug.Log("Done.");
     }
+
+    public void SetHeight(int x, int y, float height)
+    {
+        Heights[x+1,y+1] = height;
+    }
 }
 
 [System.Serializable]

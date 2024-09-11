@@ -46,6 +46,6 @@ public class CameraMovement : MonoBehaviour
 
         Vector3 to = transform.position + delta * ((speed + zoomSpeedIncrease) * Time.deltaTime);
 
-        transform.position = MapGrid.Instance.bounded(from,to);
+        transform.position = MapGrid.Instance.Bounded(from,to);
     }
 }

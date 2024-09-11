@@ -89,9 +89,9 @@ public class MapGrid : MonoBehaviour
     public Vector3 getCorner(CardinalDirection cardinalDirection,bool includeMargin=false)
     {
         if(includeMargin)
-            return getCornerWithMargin(cardinalDirection);
+            return GetCornerWithMargin(cardinalDirection);
         //else
-            return getCornerNoMargin(cardinalDirection);
+            return GetCornerNoMargin(cardinalDirection);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class MapGrid : MonoBehaviour
     /// </summary>
     /// <param name="corner"></param>
     /// <returns></returns>
-    private Vector3 getCornerNoMargin(CardinalDirection cardinalDirection)
+    private Vector3 GetCornerNoMargin(CardinalDirection cardinalDirection)
     {
         if (cardinalDirection == CardinalDirection.North ||
             cardinalDirection == CardinalDirection.South ||
@@ -144,7 +144,7 @@ public class MapGrid : MonoBehaviour
     /// <param name="cardinalDirection"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    private Vector3 getCornerWithMargin(CardinalDirection cardinalDirection)
+    private Vector3 GetCornerWithMargin(CardinalDirection cardinalDirection)
     {
         if (cardinalDirection == CardinalDirection.North ||
             cardinalDirection == CardinalDirection.South ||
@@ -190,7 +190,7 @@ public class MapGrid : MonoBehaviour
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public Vector2Int getSquare(Vector3 position,bool marginIncluded=false)
+    public Vector2Int GetSquare(Vector3 position,bool marginIncluded=false)
     {
         int x = (int)Mathf.Floor(position.x / cellDimensions.x);
         int y = (int)Mathf.Floor(position.z / cellDimensions.y);
@@ -212,7 +212,7 @@ public class MapGrid : MonoBehaviour
     /// </summary>
     /// <param name="square"></param>
     /// <returns></returns>
-    public Vector2 getCenterNoHeight(Vector2Int square)
+    public Vector2 GetCenterNoHeight(Vector2Int square)
     {
         float x = square.x*cellDimensions.x + cellDimensions.x/2;
         float y = square.y*cellDimensions.y + cellDimensions.y/2;
@@ -237,7 +237,7 @@ public class MapGrid : MonoBehaviour
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <returns></returns>
-    public Vector3 bounded(Vector3 from, Vector3 to,bool marginIncluded=false)
+    public Vector3 Bounded(Vector3 from, Vector3 to,bool marginIncluded=false)
     {
         //TODO: make it so that this catches the linear thing you got what i mean
         //if (to.x < 0 && to.z < 0)
@@ -261,6 +261,33 @@ public class MapGrid : MonoBehaviour
 
 
         return new Vector3(x,y,z);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position">The position that we are going to get the closest position of</param>
+    /// <returns>The clamped valid grid index Vector2Int</returns>
+    public Vector2Int Bounded(Vector2Int position,bool marginIncluded=false)
+    {
+        int x = position.x;
+        int y = position.y;
+
+        if (!marginIncluded)
+        {
+            if(x < 0) { x = 0; }
+            else if(x >= DimensionX) { x = DimensionX-1; }
+            if(y < 0) { y = 0; }
+            else if (y >= DimensionY) { y = DimensionY - 1; }
+
+            return new Vector2Int(x,y);
+        }
+
+        if (x < -margin) { x = -margin; }
+        else if (x > dimensionX + margin) { x = dimensionX + margin - 1; }
+        if(y < -margin) { y = -margin; }
+        else if (y > dimensionY + margin) { y = dimensionY + margin - 1; }
+
+        return new Vector2Int(x, y);
     }
 
     private void OnDrawGizmosSelected()
@@ -292,15 +319,15 @@ public class MapGrid : MonoBehaviour
             Gizmos.DrawLine(from, to);
         }
 
-        Vector3 southWest = getCornerNoMargin(CardinalDirection.SouthWest);
-        Vector3 northWest = getCornerNoMargin(CardinalDirection.NorthWest);
-        Vector3 northEast = getCornerNoMargin(CardinalDirection.NorthEast);
-        Vector3 southEast = getCornerNoMargin(CardinalDirection.SouthEast);
+        Vector3 southWest = GetCornerNoMargin(CardinalDirection.SouthWest);
+        Vector3 northWest = GetCornerNoMargin(CardinalDirection.NorthWest);
+        Vector3 northEast = GetCornerNoMargin(CardinalDirection.NorthEast);
+        Vector3 southEast = GetCornerNoMargin(CardinalDirection.SouthEast);
 
-        Vector3 southWestWithMargin = getCornerWithMargin(CardinalDirection.SouthWest);
-        Vector3 northWestWithMargin = getCornerWithMargin(CardinalDirection.NorthWest);
-        Vector3 northEastWithMargin = getCornerWithMargin(CardinalDirection.NorthEast);
-        Vector3 southEastWithMargin = getCornerWithMargin(CardinalDirection.SouthEast);
+        Vector3 southWestWithMargin = GetCornerWithMargin(CardinalDirection.SouthWest);
+        Vector3 northWestWithMargin = GetCornerWithMargin(CardinalDirection.NorthWest);
+        Vector3 northEastWithMargin = GetCornerWithMargin(CardinalDirection.NorthEast);
+        Vector3 southEastWithMargin = GetCornerWithMargin(CardinalDirection.SouthEast);
 
         southWest.y = gizmosHeight;
         northWest.y = gizmosHeight;
