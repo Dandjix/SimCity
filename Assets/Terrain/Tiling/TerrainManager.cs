@@ -32,8 +32,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    [SerializeField] int chunkSizeX = 128;
-    [SerializeField] int chunkSizeY = 128;
+    [SerializeField] int chunkSize = 128;
 
     [SerializeField] private MapGrid mapGrid;
 
@@ -104,8 +103,8 @@ public class TerrainManager : MonoBehaviour
         int totalX = (int)(- BLCorner.x + TRCorner.x);
         int totalY = (int)(- BLCorner.z + TRCorner.z);
 
-        int numberOnX = (int)Mathf.Ceil((float)totalX / chunkSizeX);
-        int numberOnY = (int)Mathf.Ceil((float)totalY / chunkSizeY);
+        int numberOnX = (int)Mathf.Ceil((float)totalX / chunkSize);
+        int numberOnY = (int)Mathf.Ceil((float)totalY / chunkSize);
 
         //int numberOnX = 4;
         //int numberOnY = 4;
@@ -124,12 +123,12 @@ public class TerrainManager : MonoBehaviour
 
         //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
-        //var globalHeights = Noise.GenerateHeights(chunkSizeX*numberOnX+1, chunkSizeY*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
+        //var globalHeights = Noise.GenerateHeights(chunkSize*numberOnX+1, chunkSize*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
         //    heightCurve, heightOffset, height);
 
         var globalHeights = Noise.GenerateHeights(
-            chunkSizeX * numberOnX + 3,
-            chunkSizeY * numberOnY + 3,
+            chunkSize * numberOnX + 3,
+            chunkSize * numberOnY + 3,
             seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
@@ -141,7 +140,7 @@ public class TerrainManager : MonoBehaviour
         {
             for (int j = 0; j < numberOnY; j++)
             {
-                Vector3 position = new Vector3(BLCorner.x + i * chunkSizeX,0, BLCorner.z + j * chunkSizeY);
+                Vector3 position = new Vector3(BLCorner.x + i * chunkSize,0, BLCorner.z + j * chunkSize);
                 //Vector2 offset = new Vector2((position.z),(position.x));
                 GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
                 generator.transform.parent = transform;
@@ -159,7 +158,7 @@ public class TerrainManager : MonoBehaviour
                 //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
                 generatorsData[j * numberOnX + i] = data;
 
-                float[,] heightsForChunk = new float[chunkSizeX+3, chunkSizeY+3];
+                float[,] heightsForChunk = new float[chunkSize+3, chunkSize+3];
 
 
 
@@ -167,7 +166,7 @@ public class TerrainManager : MonoBehaviour
                 {
                     for (int y = 0; y < heightsForChunk.GetLength(1); y++)
                     {
-                        heightsForChunk[x, y] = globalHeights[i * (chunkSizeX ) + x , j * (chunkSizeY) + y];
+                        heightsForChunk[x, y] = globalHeights[i * (chunkSize ) + x , j * (chunkSize) + y];
                     }
                 }
 
