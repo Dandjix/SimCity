@@ -54,6 +54,8 @@ public class TerrainManager : MonoBehaviour
     public float maxHeight = 100;
     public float minHeight = 0;
 
+    private int chunksOnX,chunksOnY;
+
     public Vector2 globalOffset = Vector2.zero;
 
 
@@ -94,18 +96,16 @@ public class TerrainManager : MonoBehaviour
     {
         Clear();
 
-
-
         Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
         Vector3 TRCorner = mapGrid.getCorner(CardinalDirection.NorthEast, true);
 
         int totalX = (int)(- BLCorner.x + TRCorner.x);
         int totalY = (int)(- BLCorner.z + TRCorner.z);
 
-        int numberOnX = (int)Mathf.Ceil((float)totalX / chunkSize);
-        int numberOnY = (int)Mathf.Ceil((float)totalY / chunkSize);
+        chunksOnX = (int)Mathf.Ceil((float)totalX / chunkSize);
+        chunksOnY = (int)Mathf.Ceil((float)totalY / chunkSize);
 
-        generatorsData = new GeneratorData[numberOnX,numberOnY];
+        generatorsData = new GeneratorData[chunksOnX,chunksOnY];
 
         //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
@@ -113,8 +113,8 @@ public class TerrainManager : MonoBehaviour
         //    heightCurve, heightOffset, height);
 
         var globalHeights = Noise.GenerateHeights(
-            chunkSize * numberOnX + 3,
-            chunkSize * numberOnY + 3,
+            chunkSize * chunksOnX + 3,
+            chunkSize * chunksOnY + 3,
             seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
@@ -122,11 +122,11 @@ public class TerrainManager : MonoBehaviour
 
         //Debug.Log("lengths : " + globalHeights.GetLength(0) + ", " + globalHeights.GetLength(1));
 
-        for (int i = 0; i < numberOnX; i++)
+        for (int i = 0; i < chunksOnX; i++)
         {
-            for (int j = 0; j < numberOnY; j++)
+            for (int j = 0; j < chunksOnY; j++)
             {
-                GenerateChunk(i, j,BLCorner);
+                GenerateChunk(i, j);
             }
         }
 
@@ -135,8 +135,6 @@ public class TerrainManager : MonoBehaviour
 
     public void Clear()
     {
-
-
         for (int i = 0; i < generatorsData.GetLength(0); i++)
         {
             for (int j = 0; j < generatorsData.GetLength(1); j++)
@@ -164,8 +162,12 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    private void GenerateChunk(int generatorX,int generatorY,Vector3 BLCorner)
+    private HashSet<Vector2Int> changedChunks = new HashSet<Vector2Int>();
+
+    private void GenerateChunk(int generatorX,int generatorY)
     {
+        Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
+
         Vector3 position = new Vector3(BLCorner.x + generatorX * chunkSize, 0, BLCorner.z + generatorY * chunkSize);
         //Vector2 offset = new Vector2((position.z),(position.x));
 
@@ -193,9 +195,6 @@ public class TerrainManager : MonoBehaviour
         generator.transform.parent = transform;
         generator.transform.position = position;
 
-
-
-
         generatorsData[generatorX,generatorY] = data;
 
         float[,] heightsForChunk = new float[chunkSize + 3, chunkSize + 3];
@@ -218,7 +217,61 @@ public class TerrainManager : MonoBehaviour
 
     public void SetHeight(int x, int y, float height)
     {
+        x += MapGrid.Instance.Margin;
+        y += MapGrid.Instance.Margin;
+
         Heights[x+1,y+1] = height;
+
+        int fromX = 0, toX = 0;
+        int fromY = 0, toY = 0;
+
+        if ((x) % chunkSize == 0 && x>0)
+        {
+            fromX = -1;
+            //Debug.Log("on the x- limit");
+        }
+        if ((y) % chunkSize == 0 && y>0)
+        {
+            fromY = -1;
+            //Debug.Log("on the y- limit");
+
+        }
+
+
+        if ((x+1)%chunkSize == 0 && x<(chunksOnX-1))
+        {
+            toX = 1;
+            //Debug.Log("on the x+ limit");
+        }
+        if ((y+1) % chunkSize == 0 && y<(chunksOnY-1))
+        {
+            toY = 1;
+            //Debug.Log("on the y+ limit");
+        }
+
+
+
+        int chunkX = x /chunkSize;
+        int chunkY = y /chunkSize;
+
+        for (int i = fromX; i <= toX; i++)
+        {
+            for (int j = fromY; j <= toY; j++)
+            {
+                //Debug.Log("regen at " + (chunkX + i) + ", " + (chunkY + j));
+                //GenerateChunk(chunkX+i, chunkY+j);
+                changedChunks.Add(new Vector2Int(chunkX + i, chunkY + j));
+            }
+        }
+    }
+
+    public void RegenChangedChunks()
+    {
+        foreach (var coordinates in changedChunks)
+        {
+            GenerateChunk(coordinates.x, coordinates.y);
+        }
+        changedChunks.Clear();
     }
 }
 
