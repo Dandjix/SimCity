@@ -1,8 +1,10 @@
+using Palmmedia.ReportGenerator.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 /// <summary>
 /// Creates terrain and allows to access the heights.
@@ -32,7 +34,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    [SerializeField] int chunkSize = 128;
+    [Min(8)][SerializeField] int chunkSize = 128;
 
     [SerializeField] private MapGrid mapGrid;
 
@@ -55,7 +57,7 @@ public class TerrainManager : MonoBehaviour
     public Vector2 globalOffset = Vector2.zero;
 
 
-    [SerializeField][HideInInspector] private GeneratorData[] generatorsData = new GeneratorData[0];
+    [SerializeField][HideInInspector] private GeneratorData[,] generatorsData = new GeneratorData[0,0];
     //public Vector2 offset;
 
     [SerializeField] private Material baseMaterial;
@@ -90,15 +92,12 @@ public class TerrainManager : MonoBehaviour
 
     public void Generate()
     {
-        //Debug.Log("generating ...");
+        Clear();
 
 
 
         Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
         Vector3 TRCorner = mapGrid.getCorner(CardinalDirection.NorthEast, true);
-
-        //Debug.Log("BLC : "+BLCorner);
-        //Debug.Log("TRCorner : " + TRCorner);
 
         int totalX = (int)(- BLCorner.x + TRCorner.x);
         int totalY = (int)(- BLCorner.z + TRCorner.z);
@@ -106,20 +105,7 @@ public class TerrainManager : MonoBehaviour
         int numberOnX = (int)Mathf.Ceil((float)totalX / chunkSize);
         int numberOnY = (int)Mathf.Ceil((float)totalY / chunkSize);
 
-        //int numberOnX = 4;
-        //int numberOnY = 4;
-
-        foreach (var generator in generatorsData)
-        {
-            DestroyImmediate(generator.material);
-            DestroyImmediate(generator.generator);
-        }
-
-        foreach(Transform generator in transform)
-        {
-            DestroyImmediate(generator.gameObject);
-        }
-        generatorsData = new GeneratorData[numberOnX * numberOnY];
+        generatorsData = new GeneratorData[numberOnX,numberOnY];
 
         //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
 
@@ -140,44 +126,94 @@ public class TerrainManager : MonoBehaviour
         {
             for (int j = 0; j < numberOnY; j++)
             {
-                Vector3 position = new Vector3(BLCorner.x + i * chunkSize,0, BLCorner.z + j * chunkSize);
-                //Vector2 offset = new Vector2((position.z),(position.x));
-                GameObject generator = Instantiate( Resources.Load<GameObject>("Terrain/TerrainChunk"));
-                generator.transform.parent = transform;
-                generator.transform.position = position;
-                //generator.layer = LayerMask.NameToLayer("Terrain");
-                //generator.transform.localScale = new Vector3(1,height,1);
-
-
-                Material material = new Material(baseMaterial);
-
-                GeneratorData data = new GeneratorData();
-                data.generator = generator;
-                data.material = material;
-
-                //generator.GetComponent<TerrainDisplay>().SetMaterial(data.material);
-                generatorsData[j * numberOnX + i] = data;
-
-                float[,] heightsForChunk = new float[chunkSize+3, chunkSize+3];
-
-
-
-                for (int x = 0; x < heightsForChunk.GetLength(0); x++)
-                {
-                    for (int y = 0; y < heightsForChunk.GetLength(1); y++)
-                    {
-                        heightsForChunk[x, y] = globalHeights[i * (chunkSize ) + x , j * (chunkSize) + y];
-                    }
-                }
-
-
-                generator.GetComponent<TerrainGenerator>().Generate(
-                    heightsForChunk,
-                    material);
+                GenerateChunk(i, j,BLCorner);
             }
         }
 
         //Debug.Log("Done.");
+    }
+
+    public void Clear()
+    {
+
+
+        for (int i = 0; i < generatorsData.GetLength(0); i++)
+        {
+            for (int j = 0; j < generatorsData.GetLength(1); j++)
+            {
+                var generator = generatorsData[i, j];
+                if (generator.generator == null)
+                {
+                    //Debug.Log("generator is null, ignoring");
+                    continue;
+                }
+                DestroyImmediate(generator.generator.gameObject);
+                DestroyImmediate(generator.material);
+            }
+        }
+
+        //destroy all children
+        List<Transform> generators = new List<Transform>();
+        foreach (Transform generator in transform)
+        {
+            generators.Add(generator);
+        }
+        foreach (Transform generator in generators)
+        {
+            DestroyImmediate(generator.gameObject);
+        }
+    }
+
+    private void GenerateChunk(int generatorX,int generatorY,Vector3 BLCorner)
+    {
+        Vector3 position = new Vector3(BLCorner.x + generatorX * chunkSize, 0, BLCorner.z + generatorY * chunkSize);
+        //Vector2 offset = new Vector2((position.z),(position.x));
+
+
+        //generator.layer = LayerMask.NameToLayer("Terrain");
+        //generator.transform.localScale = new Vector3(1,height,1);
+
+        GeneratorData data;
+        data = generatorsData[generatorX, generatorY];
+        Material material;
+        GameObject generator;
+        if (data.generator == null)
+        {
+            material = new Material(baseMaterial);
+            generator = Instantiate(Resources.Load<GameObject>("Terrain/TerrainChunk"));
+            data.generator = generator;
+            data.material = material;
+        }
+        else
+        {
+            material = data.material;
+            generator = data.generator;
+        }
+
+        generator.transform.parent = transform;
+        generator.transform.position = position;
+
+
+
+
+        generatorsData[generatorX,generatorY] = data;
+
+        float[,] heightsForChunk = new float[chunkSize + 3, chunkSize + 3];
+
+
+
+        for (int x = 0; x < heightsForChunk.GetLength(0); x++)
+        {
+            for (int y = 0; y < heightsForChunk.GetLength(1); y++)
+            {
+                heightsForChunk[x, y] = Heights[generatorX * (chunkSize) + x, generatorY * (chunkSize) + y];
+            }
+        }
+
+
+        generator.GetComponent<TerrainGenerator>().Generate(
+            heightsForChunk,
+            material);
     }
 
     public void SetHeight(int x, int y, float height)

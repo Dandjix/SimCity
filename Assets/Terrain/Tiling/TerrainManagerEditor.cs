@@ -22,5 +22,10 @@ public class TerrainManagerEditor : Editor
         {
             tiler.Generate();
         }
+
+        if (GUILayout.Button("Clear"))
+        {
+            tiler.Clear();
+        }
     }
 }
