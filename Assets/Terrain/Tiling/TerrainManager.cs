@@ -215,6 +215,22 @@ public class TerrainManager : MonoBehaviour
             material);
     }
 
+    /// <summary>
+    /// Sets the height for the bottom left corner vertice of that position. You must call ApplyHeights to regenerate the terrain chunks changed.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="height"></param>
+    public void SetHeight(Vector2Int position, float height)
+    {
+        SetHeight(position.x,position.y, height);
+    }
+
+    /// <summary>
+    /// Sets the height for the bottom left corner vertice of that position. You must call ApplyHeights to regenerate the terrain chunks changed.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="height"></param>
     public void SetHeight(int x, int y, float height)
     {
         x += MapGrid.Instance.Margin;
