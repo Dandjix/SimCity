@@ -3,7 +3,10 @@ guid: 6f9e7b9339be24f4db731877f08fbfa8
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - brushTexture: {fileID: 2800000, guid: cd9c4013de72fa14294b34be842ab57d, type: 3}
+  - brush: {instanceID: 0}
+  - brushMaterial: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

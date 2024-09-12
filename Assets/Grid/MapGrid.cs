@@ -192,8 +192,8 @@ public class MapGrid : MonoBehaviour
     /// <returns></returns>
     public Vector2Int GetSquare(Vector3 position,bool marginIncluded=false)
     {
-        int x = (int)Mathf.Floor(position.x / cellDimensions.x);
-        int y = (int)Mathf.Floor(position.z / cellDimensions.y);
+        int x = Mathf.FloorToInt(position.x / cellDimensions.x);
+        int y = Mathf.FloorToInt(position.z / cellDimensions.y);
         if (marginIncluded)
         {
             x = Mathf.Clamp(x, -margin, dimensionX+margin-1);

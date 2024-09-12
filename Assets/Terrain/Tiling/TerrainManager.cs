@@ -102,8 +102,8 @@ public class TerrainManager : MonoBehaviour
         int totalX = (int)(- BLCorner.x + TRCorner.x);
         int totalY = (int)(- BLCorner.z + TRCorner.z);
 
-        chunksOnX = (int)Mathf.Ceil((float)totalX / chunkSize);
-        chunksOnY = (int)Mathf.Ceil((float)totalY / chunkSize);
+        chunksOnX = Mathf.CeilToInt((float)totalX / chunkSize);
+        chunksOnY = Mathf.CeilToInt((float)totalY / chunkSize);
 
         generatorsData = new GeneratorData[chunksOnX,chunksOnY];
 

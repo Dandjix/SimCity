@@ -24,7 +24,7 @@ public class CameraZoom : MonoBehaviour
     void Update()
     {
         float scrollInput = Input.mouseScrollDelta.y;
-        if (scrollInput == 0)
+        if (scrollInput == 0 || Input.GetKey(KeyCode.LeftControl))
         {
             return;
         }
