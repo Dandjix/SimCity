@@ -251,10 +251,10 @@ public class MapGrid : MonoBehaviour
     {
         if(!marginIncluded)
         {
-            return x < 0 || y < 0 || x> dimensionX || y> dimensionY;
+            return x >= 0 && y >= 0 && x< dimensionX && y< dimensionY;
         }
         // else
-        return x < -margin || y < -margin || x > dimensionX + margin || y > dimensionY + margin;
+        return x >= -margin && y >= -margin && x < dimensionX + margin && y < dimensionY + margin;
     }
 
 

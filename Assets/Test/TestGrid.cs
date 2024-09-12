@@ -6,6 +6,9 @@ public class TestGrid : MonoBehaviour
 {
     //[SerializeField] private new Camera camera;
     [SerializeField] private GameObject marker;
+
+    [SerializeField] private Material red;
+    [SerializeField] private Material green;
     //private MapGrid mapGrid;
     // Start is called before the first frame update
     //void Start()
@@ -31,11 +34,21 @@ public class TestGrid : MonoBehaviour
             //Debug.Log("hit !");
             Vector3 hitPositon = hit.point;
             //Debug.Log("hitPos : " + hitPositon);
-            Vector2Int SquarePosition = MapGrid.Instance.GetSquare(hitPositon, false);
+            Vector2Int SquarePosition = MapGrid.Instance.GetSquare(hitPositon, true);
             //Debug.Log("SquarePos : "+SquarePosition);
             Vector3 center = MapGrid.Instance.getCenter(SquarePosition);
+            
             //Debug.Log("center : " + center);
             marker.transform.position = center;
+
+            if(MapGrid.Instance.IsInBounds(SquarePosition))
+            {
+                marker.GetComponent<Renderer>().material = green;
+            }
+            else
+            {
+                marker.GetComponent<Renderer>().material = red;
+            }
         }
         //else
         //Debug.Log("no hit");

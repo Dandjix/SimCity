@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 public class HeightSetter : MonoBehaviour
 {
@@ -12,17 +13,15 @@ public class HeightSetter : MonoBehaviour
         get => terrainPaintMode; 
         set { 
             terrainPaintMode = value;
-            GenerateBrushTextureMaterial();
+            //GenerateBrushTextureMaterial();
         } }
-
-    public float height = 0;
 
     private Vector3 center;
 
     [Min(1)][SerializeField] private float textureSize = 1;
 
-    [SerializeField]private float radius = 2;
-    public float Radius { get { return radius; } set 
+    [SerializeField]private int radius = 2;
+    public int Radius { get { return radius; } set 
         {
             radius = value;
             AdjustSize();
@@ -54,30 +53,32 @@ public class HeightSetter : MonoBehaviour
         {
             for (int y = 0; y < size+1; y++)
             {
-                if(TerrainPaintMode== TerrainPaintMode.Flatten)
-                {
-                    float distance = Vector2.Distance(new Vector2(x, y), new Vector2(size/2, size/2));
-                    float normalizedDistance = Mathf.Clamp01(distance / scaledRadius);
-                    if(normalizedDistance < 1)
-                        brushTexture.SetPixel(x, y, Color.white);
-                    else
-                        brushTexture.SetPixel(x, y, new Color(0,0,0,0));
-                }
-                else
-                {
-                    // Calculate the distance from the center of the texture
-                    float distance = Vector2.Distance(new Vector2(x, y), new Vector2(size / 2, size / 2));
+                //if(TerrainPaintMode== TerrainPaintMode.Flatten)
+                //{
+                //    float distance = Vector2.Distance(new Vector2(x, y), new Vector2(size/2, size/2));
+                //    float normalizedDistance = Mathf.Clamp01(distance / scaledRadius);
+                //    if(normalizedDistance < 1)
+                //        brushTexture.SetPixel(x, y, Color.white);
+                //    else
+                //        brushTexture.SetPixel(x, y, new Color(0,0,0,0));
+                //}
+                //else
+                //{
 
-                    // Normalize the distance
-                    float normalizedDistance = Mathf.Clamp01(distance / scaledRadius);
+                // Calculate the distance from the center of the texture
+                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(size / 2, size / 2));
 
-                    // Calculate the falloff using a power function to smooth the edges
-                    float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
+                // Normalize the distance
+                float normalizedDistance = Mathf.Clamp01(distance / scaledRadius);
 
-                    // Set the pixel color based on the falloff value
-                    brushTexture.SetPixel(x, y, new Color(falloffValue, falloffValue, falloffValue, falloffValue));
-                    //brushTexture.SetPixel(x, y, Color.red);
-                }
+                // Calculate the falloff using a power function to smooth the edges
+                float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
+
+                // Set the pixel color based on the falloff value
+                brushTexture.SetPixel(x, y, new Color(falloffValue, falloffValue, falloffValue, falloffValue));
+
+                //brushTexture.SetPixel(x, y, Color.red);
+                //}
 
 
             }
@@ -115,9 +116,71 @@ public class HeightSetter : MonoBehaviour
 
     public void Use()
     {
-        Vector2Int SquarePosition = new Vector2Int((int)center.x,(int)center.z);
+        switch(terrainPaintMode)
+        {
+            case (TerrainPaintMode.Lower):
+                LowerHeights();
+                break;
+            case (TerrainPaintMode.Raise):
+                RaiseHeights();
+                break;
+            case (TerrainPaintMode.Flatten):
+                FlattenHeights();
+                break;
+        }
 
-        TerrainManager.Instance.SetHeight(SquarePosition.x, SquarePosition.y, height);
+    }
+
+    private void LowerHeights()
+    {
+        //int size = Mathf.CeilToInt(radius) * 2 + 1;
+        //int centerX = Mathf.FloorToInt(center.x);
+        //int centerY = Mathf.FloorToInt(center.y);
+
+        //int BLX = centerX - radius;
+        //int BLY = centerY - radius;
+
+        //for (int x = 0; x <= size; x++)
+        //{
+        //    for (int y = 0; y <= size; y++)
+        //    {
+        //        Vector2Int vertex = new Vector2Int(BLX + x, BLY + y);
+        //        if(!MapGrid.Instance.IsInBounds(vertex))
+        //        {
+        //            Debug.Log("aborted : not in bounds : " + vertex);
+        //            continue;
+        //        }
+
+
+        //        float distance = Vector2.Distance(new Vector2(x, y), center);
+
+        //        // Normalize the distance
+        //        float normalizedDistance = Mathf.Clamp01(distance / radius);
+
+        //        // Calculate the falloff using a power function to smooth the edges
+        //        float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
+
+        //        float height = TerrainManager.Instance.Heights[vertex.x, vertex.y] - falloffValue;
+        //        Debug.Log("height set to : " + height);
+        //        TerrainManager.Instance.SetHeight(vertex, height);
+        //    }
+        //}
+
+        Vector2Int centerInt = new Vector2Int(Mathf.FloorToInt(center.x),Mathf.FloorToInt( center.z));
+
+
+        TerrainManager.Instance.SetHeight(centerInt, 0);
+
+        TerrainManager.Instance.ApplyHeights();
+    }
+
+    private void RaiseHeights()
+    {
+        TerrainManager.Instance.ApplyHeights();
+    }
+
+    private void FlattenHeights()
+    {
         TerrainManager.Instance.ApplyHeights();
     }
 
@@ -125,7 +188,7 @@ public class HeightSetter : MonoBehaviour
 
 public enum TerrainPaintMode
 {
-    Higher,
+    Raise,
     Lower,
     Flatten
 }

@@ -6,9 +6,13 @@ public class HeightSetterControl : MonoBehaviour
 {
     [SerializeField] private HeightSetter HeightSetter;
 
-    [SerializeField] private float zoomIncrement = 1f;
-    [SerializeField] private float minRadius = 1f;
-    [SerializeField] private float maxRadius = 10f;
+    [SerializeField] private int radiusIncrement = 1;
+    [SerializeField] private int minRadius = 1;
+    [SerializeField] private int maxRadius = 10;
+
+    [SerializeField][Range(0,1)] private float falloffIncrement = 0.1f;
+    [SerializeField][Range(0, 1)] private float minFalloff = 0f;
+    [SerializeField][Range(0, 1)] private float maxFalloff = 1f;
 
 
     void Update()
@@ -17,7 +21,8 @@ public class HeightSetterControl : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         LayerMask layerMask = LayerMask.GetMask("Terrain");
-        HandleZoom();
+        HandleRadius();
+        HandleFalloff();
         if (Physics.Raycast(ray, out hit, 100, layerMask))
         {
             //Debug.Log("hit");
@@ -49,22 +54,40 @@ public class HeightSetterControl : MonoBehaviour
         HeightSetter.Radius = radius;
     }
 
-    private float radius = 1;
+    private int radius = 1;
 
-    private void HandleZoom()
+    private void HandleRadius()
     {
         Vector2 scrollDelta = Input.mouseScrollDelta;
 
-        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl))
+        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift))
         {
             //Debug.Log("radius : " + radius);
-            radius += scrollDelta.y * zoomIncrement;
+            radius += Mathf.CeilToInt(scrollDelta.y) * radiusIncrement;
             radius = Mathf.Clamp(radius,minRadius,maxRadius);
             HeightSetter.Radius = radius;
         }
     }
 
-    private TerrainPaintMode[] modes = new TerrainPaintMode[] { TerrainPaintMode.Higher, TerrainPaintMode.Lower, TerrainPaintMode.Flatten };
+    private float falloff = 0.5f;
+
+    private void HandleFalloff()
+    {
+        Vector2 scrollDelta = Input.mouseScrollDelta;
+
+        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift))
+        {
+            //Debug.Log("radius : " + radius);
+            falloff += scrollDelta.y * falloffIncrement;
+            falloff = Mathf.Clamp(falloff, minFalloff, maxFalloff);
+            //Debug.Log("setting falloff to : " + falloff);
+            if (falloff == 0)
+                falloff = 0.000000000001f;
+            HeightSetter.Falloff = falloff;
+        }
+    }
+
+    private TerrainPaintMode[] modes = new TerrainPaintMode[] { TerrainPaintMode.Raise, TerrainPaintMode.Lower, TerrainPaintMode.Flatten };
     private int modeIndex = 0;
 
     private void HandleMode()
