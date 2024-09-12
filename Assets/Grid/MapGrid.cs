@@ -230,6 +230,34 @@ public class MapGrid : MonoBehaviour
         float height = TerrainManager.Instance.GetHeightAtCenter(square);
         return new Vector3(x,height, y);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="marginIncluded"></param>
+    /// <returns>true if the position is within the bounds of the map grid, false otherwise</returns>
+    public bool IsInBounds(Vector2Int position, bool marginIncluded = false)
+    {
+        return IsInBounds(position.x, position.y, marginIncluded);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="marginIncluded"></param>
+    /// <returns>true if the position is within the bounds of the map grid, false otherwise</returns>
+    public bool IsInBounds(int x, int y, bool marginIncluded=false)
+    {
+        if(!marginIncluded)
+        {
+            return x < 0 || y < 0 || x> dimensionX || y> dimensionY;
+        }
+        // else
+        return x < -margin || y < -margin || x > dimensionX + margin || y > dimensionY + margin;
+    }
+
+
 
     /// <summary>
     /// bounds a movement to the mapgrid. From is supposed to be in the grid, to may be outside.
