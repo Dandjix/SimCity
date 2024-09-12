@@ -118,7 +118,7 @@ public class HeightSetter : MonoBehaviour
         Vector2Int SquarePosition = new Vector2Int((int)center.x,(int)center.z);
 
         TerrainManager.Instance.SetHeight(SquarePosition.x, SquarePosition.y, height);
-        TerrainManager.Instance.RegenChangedChunks();
+        TerrainManager.Instance.ApplyHeights();
     }
 
 }

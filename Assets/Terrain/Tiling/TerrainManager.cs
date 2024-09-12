@@ -265,7 +265,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public void RegenChangedChunks()
+    public void ApplyHeights()
     {
         foreach (var coordinates in changedChunks)
         {
