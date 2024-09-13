@@ -66,14 +66,19 @@ public class TerrainManager : MonoBehaviour
 
     public float[,] Heights { get; private set; }
 
-    public float GetHeightAtCenter(Vector2Int square)
+    public float GetHeightAtBottomLeft(Vector2Int square)
     {
-        return GetHeightAtCenter(square.x,square.y);
+        return GetHeightAtBottomLeft(square.x, square.y);
     }
 
     public float GetHeightAtBottomLeft(int x,int y)
     {
-        return Heights[x+1,y+1];
+        return Heights[x+2,y+2];
+    }
+
+    public float GetHeightAtCenter(Vector2Int square)
+    {
+        return GetHeightAtCenter(square.x, square.y);
     }
 
     public float GetHeightAtCenter(int x,int y)
