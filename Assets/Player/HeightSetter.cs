@@ -173,22 +173,20 @@ public class HeightSetter : MonoBehaviour
 
 
                 // Normalize the distance
-                float normalizedDistance = Mathf.Clamp01(distance /radius);
+                float normalizedDistance = Mathf.Clamp01(distance / radius);
 
                 // Calculate the falloff using a power function to smooth the edges
                 float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
 
-                if (falloffValue < 0)
-                    falloffValue = 0;
+                //if (falloffValue < 0)
+                //    falloffValue = 0;
 
-                float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x,vertex.y) - falloffValue * factor;
+                float increment = falloffValue * factor;
+
+                //float increment = 1 * factor;
+
+                float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x,vertex.y) - increment;
                 //float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x, vertex.y);
-
-                Debug.Log("x : " + x + ", y : " + y + ", vertex : " + vertex+",d : "+distance+", radius : "+radius +", nd : "+normalizedDistance+", falloff value : "+falloffValue);
-
-
-
-                Debug.Log("height set to : " + height);
 
                 TerrainManager.Instance.SetHeight(vertex, height);
             }
