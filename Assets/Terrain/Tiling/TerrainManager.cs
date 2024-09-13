@@ -73,7 +73,7 @@ public class TerrainManager : MonoBehaviour
 
     public float GetHeightAtBottomLeft(int x,int y)
     {
-        return Heights[x+2,y+2];
+        return Heights[x+MapGrid.Instance.Margin+1, y + MapGrid.Instance.Margin+1];
     }
 
     public float GetHeightAtCenter(Vector2Int square)
@@ -83,8 +83,8 @@ public class TerrainManager : MonoBehaviour
 
     public float GetHeightAtCenter(int x,int y)
     {
-        x += mapGrid.Margin;
-        y += mapGrid.Margin;
+        //x += mapGrid.Margin;
+        //y += mapGrid.Margin;
 
         float h = (GetHeightAtBottomLeft(x, y) + GetHeightAtBottomLeft(x + 1, y) + GetHeightAtBottomLeft(x, y + 1) + GetHeightAtBottomLeft(x + 1, y + 1)) / 4;
 

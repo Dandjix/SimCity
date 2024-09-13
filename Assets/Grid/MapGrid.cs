@@ -236,9 +236,9 @@ public class MapGrid : MonoBehaviour
     /// <param name="position"></param>
     /// <param name="marginIncluded"></param>
     /// <returns>true if the position is within the bounds of the map grid, false otherwise</returns>
-    public bool IsInBounds(Vector2Int position, bool marginIncluded = false)
+    public bool IsCenterInBounds(Vector2Int position, bool marginIncluded = false)
     {
-        return IsInBounds(position.x, position.y, marginIncluded);
+        return IsCenterInBounds(position.x, position.y, marginIncluded);
     }
     /// <summary>
     /// 
@@ -247,11 +247,32 @@ public class MapGrid : MonoBehaviour
     /// <param name="y"></param>
     /// <param name="marginIncluded"></param>
     /// <returns>true if the position is within the bounds of the map grid, false otherwise</returns>
-    public bool IsInBounds(int x, int y, bool marginIncluded=false)
+    public bool IsCenterInBounds(int x, int y, bool marginIncluded=false)
     {
         if(!marginIncluded)
         {
             return x >= 0 && y >= 0 && x< dimensionX && y< dimensionY;
+        }
+        // else
+        return x >= -margin && y >= -margin && x < dimensionX + margin && y < dimensionY + margin;
+    }
+
+    public bool IsBottomLeftInBounds(Vector2Int position, bool marginIncluded = false)
+    {
+        return IsBottomLeftInBounds(position.x, position.y, marginIncluded);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="marginIncluded"></param>
+    /// <returns>true if the position is within the bounds of the map grid, false otherwise</returns>
+    public bool IsBottomLeftInBounds(int x, int y, bool marginIncluded = false)
+    {
+        if (!marginIncluded)
+        {
+            return x > 0 && y > 0 && x < dimensionX && y < dimensionY;
         }
         // else
         return x >= -margin && y >= -margin && x < dimensionX + margin && y < dimensionY + margin;

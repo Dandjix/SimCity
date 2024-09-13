@@ -18,9 +18,9 @@ public class TestGrid : MonoBehaviour
 
         foreach (var square in mapGrid.GetAllSquares())
         {
-            float height = TerrainManager.Instance.GetHeightAtBottomLeft(square.x, square.y);
+            float height = TerrainManager.Instance.GetHeightAtCenter(square.x, square.y);
             var marker2 = Instantiate(marker);
-            marker2.transform.position = new Vector3(square.x,height,square.y);
+            marker2.transform.position = new Vector3(square.x+0.5f,height,square.y + 0.5f);
         }
     }
 
