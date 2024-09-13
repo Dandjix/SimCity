@@ -11,7 +11,21 @@ public class HeightSetter : MonoBehaviour
 
     [SerializeField] private Texture2D brushTexture;
 
-    public float strength = 1;
+    [SerializeField] private float strength = 1;
+    public float Strength { 
+        get => strength; 
+        set => strength = value; }
+
+    private Color color = Color.white;
+    public Color Color { 
+        get => color;
+        set
+        {
+            color = value;
+            GenerateBrushTextureMaterial();
+        }
+                
+    }
 
     private TerrainPaintMode terrainPaintMode;
     public TerrainPaintMode TerrainPaintMode { 
@@ -80,7 +94,9 @@ public class HeightSetter : MonoBehaviour
                 float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
 
                 // Set the pixel color based on the falloff value
-                brushTexture.SetPixel(x, y, new Color(falloffValue, falloffValue, falloffValue, falloffValue));
+
+
+                brushTexture.SetPixel(x, y, new Color(falloffValue*color.r, falloffValue*color.g, falloffValue*color.b, falloffValue));
 
                 //brushTexture.SetPixel(x, y, Color.red);
                 //}

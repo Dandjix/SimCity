@@ -14,6 +14,10 @@ public class HeightSetterControl : MonoBehaviour
     [SerializeField][Range(0, 1)] private float minFalloff = 0f;
     [SerializeField][Range(0, 1)] private float maxFalloff = 1f;
 
+    [SerializeField][Range(0, 1)] private float strengthIncrement = 0.1f;
+    [SerializeField][Range(1, 10)] private float minStrength = 1f;
+    [SerializeField][Range(1, 10)] private float maxStrength = 10f;
+
 
     void Update()
     {
@@ -23,6 +27,7 @@ public class HeightSetterControl : MonoBehaviour
         LayerMask layerMask = LayerMask.GetMask("Terrain");
         HandleRadius();
         HandleFalloff();
+        HandleStrength();
         if (Physics.Raycast(ray, out hit, 100, layerMask))
         {
             //Debug.Log("hit");
@@ -60,7 +65,7 @@ public class HeightSetterControl : MonoBehaviour
     {
         Vector2 scrollDelta = Input.mouseScrollDelta;
 
-        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift))
+        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftAlt))
         {
             //Debug.Log("radius : " + radius);
             radius += Mathf.CeilToInt(scrollDelta.y) * radiusIncrement;
@@ -75,7 +80,7 @@ public class HeightSetterControl : MonoBehaviour
     {
         Vector2 scrollDelta = Input.mouseScrollDelta;
 
-        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift))
+        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftAlt))
         {
             //Debug.Log("radius : " + radius);
             falloff += scrollDelta.y * falloffIncrement;
@@ -84,6 +89,25 @@ public class HeightSetterControl : MonoBehaviour
             if (falloff == 0)
                 falloff = 0.000000000001f;
             HeightSetter.Falloff = falloff;
+        }
+    }
+
+    private float strength = 1;
+
+    private void HandleStrength()
+    {
+        Vector2 scrollDelta = Input.mouseScrollDelta;
+
+        if (scrollDelta != Vector2.zero && Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftAlt))
+        {
+            //Debug.Log("radius : " + radius);
+            strength += scrollDelta.y * strengthIncrement;
+            strength = Mathf.Clamp(strength, minStrength, maxStrength);
+
+            Color color = Color.Lerp(Color.white, Color.red, (strength - minStrength) /(maxStrength-minStrength) );
+
+            HeightSetter.Strength = strength;
+            HeightSetter.Color = color;
         }
     }
 
