@@ -35,7 +35,8 @@ public class HeightSetterControl : MonoBehaviour
 
             Vector3 hitPositon = hit.point;
             Vector2Int SquarePosition = MapGrid.Instance.GetSquare(hitPositon, false);
-            Vector3 center = MapGrid.Instance.getCenter(SquarePosition);
+            //Debug.Log("mapgrid instance : "+ MapGrid.Instance);
+            Vector3 center = MapGrid.Instance.GetCenter(SquarePosition);
 
             HeightSetter.SetBrushCenter(center);
             //Debug.Log("center : " + center);
@@ -121,7 +122,7 @@ public class HeightSetterControl : MonoBehaviour
             modeIndex %= modes.Length;
             TerrainPaintMode mode = modes[modeIndex];
             HeightSetter.TerrainPaintMode = mode;
-            Debug.Log("changed mode to : " + mode);
+            //Debug.Log("changed mode to : " + mode);
         }
     }
 }

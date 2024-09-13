@@ -8,13 +8,27 @@ public class HeightSetter : MonoBehaviour
 {
     [SerializeField] private GameObject marker;
 
-
     [SerializeField] private Texture2D brushTexture;
 
     [SerializeField] private float strength = 1;
     public float Strength { 
         get => strength; 
         set => strength = value; }
+
+    private float minHeight;
+    private float maxHeight;
+
+    public System.Action OnParameterChanged;
+
+    private void OnEnable()
+    {
+        brush.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        brush.SetActive(false);
+    }
 
     private Color color = Color.white;
     public Color Color { 
@@ -23,6 +37,7 @@ public class HeightSetter : MonoBehaviour
         {
             color = value;
             GenerateBrushTextureMaterial();
+            OnParameterChanged?.Invoke();
         }
                 
     }
@@ -32,7 +47,7 @@ public class HeightSetter : MonoBehaviour
         get => terrainPaintMode; 
         set { 
             terrainPaintMode = value;
-            //GenerateBrushTextureMaterial();
+            OnParameterChanged?.Invoke();
         } }
 
     private Vector3 center;
@@ -45,6 +60,7 @@ public class HeightSetter : MonoBehaviour
             radius = value;
             AdjustSize();
             GenerateBrushTextureMaterial();
+            OnParameterChanged?.Invoke();
         } }
 
     [SerializeField] float falloff = 1.0f;
@@ -52,6 +68,7 @@ public class HeightSetter : MonoBehaviour
         { 
             falloff = value; 
             GenerateBrushTextureMaterial();
+            OnParameterChanged?.Invoke();
         } }
 
     [SerializeField] private GameObject brush;
@@ -120,6 +137,10 @@ public class HeightSetter : MonoBehaviour
 
     private void Start()
     {
+        minHeight = TerrainManager.Instance.GetMinHeight();
+        maxHeight = TerrainManager.Instance.GetMaxHeight();
+
+        OnParameterChanged?.Invoke();
         GenerateBrushTextureMaterial();
     }
 
@@ -184,7 +205,7 @@ public class HeightSetter : MonoBehaviour
 
                 float increment = falloffValue * factor;
                 float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x,vertex.y) - increment;
-                TerrainManager.Instance.SetHeight(vertex, height);
+                SetHeight(vertex, height);
             }
         }
         TerrainManager.Instance.ApplyHeights();
@@ -221,7 +242,7 @@ public class HeightSetter : MonoBehaviour
 
                 float increment = falloffValue * factor;
                 float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x, vertex.y) + increment;
-                TerrainManager.Instance.SetHeight(vertex, height);
+                SetHeight(vertex, height);
             }
         }
         TerrainManager.Instance.ApplyHeights();
@@ -279,13 +300,19 @@ public class HeightSetter : MonoBehaviour
                     height = heightAtVertex + increment;
                 }
 
-                TerrainManager.Instance.SetHeight(vertex, height);
+                SetHeight(vertex, height);
             }
         }
 
         TerrainManager.Instance.ApplyHeights();
     }
 
+
+    private void SetHeight(Vector2Int vertex, float height)
+    {
+        height = Mathf.Clamp(height,minHeight,maxHeight);
+        TerrainManager.Instance.SetHeight(vertex, height);
+    }
 }
 
 public enum TerrainPaintMode

@@ -1,10 +1,10 @@
-using Palmmedia.ReportGenerator.Core;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
+
 
 /// <summary>
 /// Creates terrain and allows to access the heights.
@@ -12,10 +12,13 @@ using static UnityEngine.UI.GridLayoutGroup;
 [ExecuteAlways]
 public class TerrainManager : MonoBehaviour
 {
+    public Action BeforeGenerate;
+    public Action AfterGenerate;
+
     public static TerrainManager Instance { get 
         {
             if(instance == null)
-                return UnityEngine.Object.FindFirstObjectByType<TerrainManager>();
+                return FindFirstObjectByType<TerrainManager>();
             return instance;
         }
         set
@@ -29,9 +32,24 @@ public class TerrainManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+    }
+
+    private void Start()
+    {
+        //Debug.Log("calling generate : ");
         Generate();
     }
 
+    public float GetMinHeight()
+    {
+        return heightCurve.Evaluate(0) * height + heightOffset;
+    }
+
+    public float GetMaxHeight()
+    {
+        return heightCurve.Evaluate(1) * height + heightOffset;
+    }
 
 
     [Min(8)][SerializeField] int chunkSize = 128;
@@ -99,6 +117,8 @@ public class TerrainManager : MonoBehaviour
 
     public void Generate()
     {
+        BeforeGenerate?.Invoke();
+
         Clear();
 
         Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
@@ -134,8 +154,8 @@ public class TerrainManager : MonoBehaviour
                 GenerateChunk(i, j);
             }
         }
-
-        //Debug.Log("Done.");
+        //Debug.Log("calling action !");
+        AfterGenerate?.Invoke();
     }
 
     public void Clear()

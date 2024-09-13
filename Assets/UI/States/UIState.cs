@@ -2,17 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIState : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public abstract class UIState : MonoBehaviour {
+    public abstract void Enter(UIState from);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Exit(UIState to);
 }

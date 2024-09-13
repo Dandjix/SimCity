@@ -11,6 +11,7 @@ public class MapGrid : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        //Debug.Log("instance set on mapgrid : "+Instance);
     }
 
     //[SerializeField] private Vector2Int dimensions = new Vector2Int(100, 100);
@@ -25,6 +26,21 @@ public class MapGrid : MonoBehaviour
     /// the y dimension of the grid, without the margin
     /// </summary>
     public int DimensionY { get { return dimensionY; } }
+
+    public Vector2Int GetDimensions(bool marginIncluded = false)
+    {
+        if(marginIncluded)
+            return new Vector2Int(dimensionX + margin*2, dimensionY + margin*2);
+        return new Vector2Int(dimensionX, dimensionY);
+    }
+
+    public Vector2 Center
+    {
+        get
+        {
+            return new Vector2(DimensionX / 2, DimensionY / 2);
+        }
+    }
 
     [SerializeField] private float gizmosHeight;
 
@@ -223,7 +239,7 @@ public class MapGrid : MonoBehaviour
     /// </summary>
     /// <param name="square"></param>
     /// <returns></returns>
-    public Vector3 getCenter(Vector2Int square)
+    public Vector3 GetCenter(Vector2Int square)
     {
         float x = square.x * cellDimensions.x + cellDimensions.x / 2;
         float y = square.y * cellDimensions.y + cellDimensions.y / 2;
