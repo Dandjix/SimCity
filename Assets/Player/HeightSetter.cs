@@ -6,7 +6,12 @@ using UnityEngine.UIElements;
 
 public class HeightSetter : MonoBehaviour
 {
+    [SerializeField] private GameObject marker;
+
+
     [SerializeField] private Texture2D brushTexture;
+
+    public float strength = 1;
 
     private TerrainPaintMode terrainPaintMode;
     public TerrainPaintMode TerrainPaintMode { 
@@ -116,10 +121,11 @@ public class HeightSetter : MonoBehaviour
 
     public void Use()
     {
+        float factor = Time.deltaTime * strength;
         switch(terrainPaintMode)
         {
             case (TerrainPaintMode.Lower):
-                LowerHeights();
+                LowerHeights(factor);
                 break;
             case (TerrainPaintMode.Raise):
                 RaiseHeights();
@@ -131,45 +137,67 @@ public class HeightSetter : MonoBehaviour
 
     }
 
-    private void LowerHeights()
+    private void LowerHeights(float factor)
     {
-        //int size = Mathf.CeilToInt(radius) * 2 + 1;
-        //int centerX = Mathf.FloorToInt(center.x);
-        //int centerY = Mathf.FloorToInt(center.y);
+        int size = radius * 2;
 
-        //int BLX = centerX - radius;
-        //int BLY = centerY - radius;
+        int centerX = Mathf.FloorToInt(center.x);
+        int centerY = Mathf.FloorToInt(center.z);
+        Vector2Int centerInt = new Vector2Int(centerX, centerY);
 
-        //for (int x = 0; x <= size; x++)
-        //{
-        //    for (int y = 0; y <= size; y++)
-        //    {
-        //        Vector2Int vertex = new Vector2Int(BLX + x, BLY + y);
-        //        if(!MapGrid.Instance.IsInBounds(vertex))
-        //        {
-        //            Debug.Log("aborted : not in bounds : " + vertex);
-        //            continue;
-        //        }
+        int BLX = centerX - radius;
+        int BLY = centerY - radius;
+        Vector2Int bottomLeft = new Vector2Int(BLX, BLY);
 
 
-        //        float distance = Vector2.Distance(new Vector2(x, y), center);
+        //marker.transform.position = new Vector3(BLX, TerrainManager.Instance.GetHeightAtCenter(bottomLeft), BLY);
 
-        //        // Normalize the distance
-        //        float normalizedDistance = Mathf.Clamp01(distance / radius);
+        for (int x = 0; x <= size; x++)
+        {
+            for (int y = 0; y <= size; y++)
+            {
+                Vector2Int vertex = new Vector2Int(BLX + x, BLY + y);
 
-        //        // Calculate the falloff using a power function to smooth the edges
-        //        float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
-
-        //        float height = TerrainManager.Instance.Heights[vertex.x, vertex.y] - falloffValue;
-        //        Debug.Log("height set to : " + height);
-        //        TerrainManager.Instance.SetHeight(vertex, height);
-        //    }
-        //}
-
-        Vector2Int centerInt = new Vector2Int(Mathf.FloorToInt(center.x),Mathf.FloorToInt( center.z));
+                if (!MapGrid.Instance.IsBottomLeftInBounds(vertex))
+                {
+                    //Debug.Log("aborted : not in bounds : " + vertex);
+                    continue;
+                }
 
 
-        TerrainManager.Instance.SetHeight(centerInt, 0);
+
+
+
+
+                float distance = Vector2Int.Distance(vertex, centerInt);
+
+
+                // Normalize the distance
+                float normalizedDistance = Mathf.Clamp01(distance /radius);
+
+                // Calculate the falloff using a power function to smooth the edges
+                float falloffValue = Mathf.Pow(1 - normalizedDistance, falloff);
+
+                if (falloffValue < 0)
+                    falloffValue = 0;
+
+                float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x,vertex.y) - falloffValue * factor;
+                //float height = TerrainManager.Instance.GetHeightAtBottomLeft(vertex.x, vertex.y);
+
+                Debug.Log("x : " + x + ", y : " + y + ", vertex : " + vertex+",d : "+distance+", radius : "+radius +", nd : "+normalizedDistance+", falloff value : "+falloffValue);
+
+
+
+                Debug.Log("height set to : " + height);
+
+                TerrainManager.Instance.SetHeight(vertex, height);
+            }
+        }
+
+        //Vector2Int centerInt = new Vector2Int(Mathf.FloorToInt(center.x),Mathf.FloorToInt( center.z));
+
+
+        //TerrainManager.Instance.SetHeight(centerInt, 0);
 
         TerrainManager.Instance.ApplyHeights();
     }

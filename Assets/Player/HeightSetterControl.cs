@@ -8,7 +8,7 @@ public class HeightSetterControl : MonoBehaviour
 
     [SerializeField] private int radiusIncrement = 1;
     [SerializeField] private int minRadius = 1;
-    [SerializeField] private int maxRadius = 10;
+    [SerializeField] private int maxRadius;
 
     [SerializeField][Range(0,1)] private float falloffIncrement = 0.1f;
     [SerializeField][Range(0, 1)] private float minFalloff = 0f;
