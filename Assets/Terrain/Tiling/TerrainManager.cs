@@ -15,6 +15,8 @@ public class TerrainManager : MonoBehaviour
     public Action BeforeGenerate;
     public Action AfterGenerate;
 
+    [Min(8)][SerializeField] public int chunkSize = 128;
+
     public static TerrainManager Instance { get 
         {
             if(instance == null)
@@ -53,8 +55,6 @@ public class TerrainManager : MonoBehaviour
 
     public TerrainPreset preset;
 
-
-    public int chunkSize {get { return preset.terrainGenerationData.chunkSize; } }
 
     public int seed { get { return preset.terrainGenerationData.seed; } }
 
