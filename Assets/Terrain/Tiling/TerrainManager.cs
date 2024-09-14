@@ -37,6 +37,7 @@ public class TerrainManager : MonoBehaviour
 
     private void Start()
     {
+        //Debug.Log("generating terrain !");
         Generate();
     }
 
@@ -50,36 +51,62 @@ public class TerrainManager : MonoBehaviour
         return heightCurve.Evaluate(1) * height + heightOffset;
     }
 
-
-    [Min(8)][SerializeField] int chunkSize = 128;
-
-    [SerializeField] private MapGrid mapGrid;
-
-    [SerializeField] public int seed;
-
-    [Min(0)][SerializeField] public float height = 20;
-    [SerializeField] public float heightOffset = -4;
-
-    [Min(1)][SerializeField] public float scale = 20;
-
-    [SerializeField] public int octaves;
-    [Range(0, 1)][SerializeField] public float persistence;
-    [Min(1)][SerializeField] public float lacunarity;
-
-    [SerializeField] public AnimationCurve heightCurve;
-
-    public float maxHeight = 100;
-    public float minHeight = 0;
-
-    private int chunksOnX,chunksOnY;
-
-    public Vector2 globalOffset = Vector2.zero;
+    public TerrainPreset preset;
 
 
-    [SerializeField][HideInInspector] private GeneratorData[,] generatorsData = new GeneratorData[0,0];
+    public int chunkSize {get { return preset.terrainGenerationData.chunkSize; } }
+
+    public int seed { get { return preset.terrainGenerationData.seed; } }
+
+    public float height { get { return preset.terrainGenerationData.height; } }
+    public float heightOffset { get { return preset.terrainGenerationData.heightOffset; } }
+
+    public float scale { get { return preset.terrainGenerationData.scale; } }
+
+    public int octaves { get { return preset.terrainGenerationData.octaves; } }
+    public float persistence { get { return preset.terrainGenerationData.persistence; } }
+
+    public float lacunarity { get { return preset.terrainGenerationData.lacunarity; } }
+
+    public AnimationCurve heightCurve { get { return preset.terrainGenerationData.heightCurve; } }
+
+    public float maxHeight { get { return preset.terrainGenerationData.maxHeight; } }
+    public float minHeight { get { return preset.terrainGenerationData.minHeight; } }
+
+    public Vector2 globalOffset { get { return preset.terrainGenerationData.globalOffset; } }
+
+    private Material baseMaterial { get { return preset.terrainGenerationData.baseMaterial; } }
+
+
+    //[SerializeField] public int seed;
+
+    //[Min(0)][SerializeField] public float height = 20;
+    //[SerializeField] public float heightOffset = -4;
+
+    //[Min(1)][SerializeField] public float scale = 20;
+
+    //[SerializeField] public int octaves;
+    //[Range(0, 1)][SerializeField] public float persistence;
+    //[Min(1)][SerializeField] public float lacunarity;
+
+    //[SerializeField] public AnimationCurve heightCurve;
+
+    //public float maxHeight = 100;
+    //public float minHeight = 0;
+
+
+
+
+    private int chunksOnX, chunksOnY;
+
+    //[SerializeField] private Material baseMaterial;
+
     //public Vector2 offset;
 
-    [SerializeField] private Material baseMaterial;
+    [SerializeField][HideInInspector] private GeneratorData[,] generatorsData = new GeneratorData[0,0];
+
+
+
 
     public float[,] Heights { get; private set; }
 
@@ -100,8 +127,8 @@ public class TerrainManager : MonoBehaviour
 
     public float GetHeightAtCenter(int x,int y)
     {
-        //x += mapGrid.Margin;
-        //y += mapGrid.Margin;
+        //x += MapGrid.Instance.Margin;
+        //y += MapGrid.Instance.Margin;
 
         float h = (GetHeightAtBottomLeft(x, y) + GetHeightAtBottomLeft(x + 1, y) + GetHeightAtBottomLeft(x, y + 1) + GetHeightAtBottomLeft(x + 1, y + 1)) / 4;
 
@@ -120,8 +147,8 @@ public class TerrainManager : MonoBehaviour
 
         Clear();
 
-        Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
-        Vector3 TRCorner = mapGrid.getCorner(CardinalDirection.NorthEast, true);
+        Vector3 BLCorner = MapGrid.Instance.getCorner(CardinalDirection.SouthWest, true);
+        Vector3 TRCorner = MapGrid.Instance.getCorner(CardinalDirection.NorthEast, true);
 
         int totalX = (int)(- BLCorner.x + TRCorner.x);
         int totalY = (int)(- BLCorner.z + TRCorner.z);
@@ -190,7 +217,7 @@ public class TerrainManager : MonoBehaviour
 
     private void GenerateChunk(int generatorX,int generatorY)
     {
-        Vector3 BLCorner = mapGrid.getCorner(CardinalDirection.SouthWest, true);
+        Vector3 BLCorner = MapGrid.Instance.getCorner(CardinalDirection.SouthWest, true);
 
         Vector3 position = new Vector3(BLCorner.x + generatorX * chunkSize, 0, BLCorner.z + generatorY * chunkSize);
         //Vector2 offset = new Vector2((position.z),(position.x));
