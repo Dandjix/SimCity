@@ -263,7 +263,8 @@ public class TerrainManager : MonoBehaviour
 
         generator.GetComponent<TerrainGenerator>().Generate(
             heightsForChunk,
-            material);
+            material,
+            preset.colorData);
     }
 
     /// <summary>

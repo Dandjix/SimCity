@@ -16,10 +16,10 @@ MonoBehaviour:
   seed: 0
   height: 20
   heightOffset: -0.5
-  scale: 40
-  octaves: 2
+  scale: 50
+  octaves: 3
   persistence: 0.5
-  lacunarity: 0
+  lacunarity: 2
   heightCurve:
     serializedVersion: 2
     m_Curve:

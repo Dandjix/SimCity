@@ -12,3 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3bdff59070d3f4896596a6f980070c, type: 3}
   m_Name: HillsColor
   m_EditorClassIdentifier: 
+  autoUpdate: 1
+  terrainTypes:
+  - name: deep lakebed
+    height: -0.25
+    color: {r: 0.25592735, g: 0.33938023, b: 0.3433962, a: 0}
+  - name: lakebed
+    height: -0.1
+    color: {r: 0.33716625, g: 0.6226415, b: 0.5627234, a: 0}
+  - name: sand
+    height: 0.46
+    color: {r: 0.7584905, g: 0.7105912, b: 0.47369877, a: 0}
+  - name: grass
+    height: 4.37
+    color: {r: 0.114061296, g: 0.5320754, b: 0.083324976, a: 0}
+  - name: lighter grass
+    height: 7
+    color: {r: 0.2300053, g: 0.6150943, b: 0.08239943, a: 0}
+  - name: dirt
+    height: 10.27
+    color: {r: 0.5999999, g: 0.23061037, b: 0.16188674, a: 0}
+  - name: rock
+    height: 13.6
+    color: {r: 0.5471698, g: 0.46974012, b: 0.47832283, a: 0}
+  - name: snow
+    height: 30
+    color: {r: 0.7150943, g: 0.92952865, b: 1, a: 0}

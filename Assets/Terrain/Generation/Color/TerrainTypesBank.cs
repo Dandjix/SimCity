@@ -22,8 +22,7 @@ public class TerrainTypesBank : MonoBehaviour
         } 
     }
 
-    [SerializeField] private TerrainType[] terrainTypes;
-    public TerrainType[] TerrainTypes { get { return terrainTypes; } }
+
 
     void Start()
     {

@@ -10,13 +10,13 @@ public class TerrainColorGenerator : MonoBehaviour
 
     //}
 
-    public Texture2D GenerateTexture(float[,] heights,int xSize,int ySize)
+    public Texture2D GenerateTexture(float[,] heights,int xSize,int ySize, ColorData colorData)
     {
         Color[] colorMap = new Color[(xSize-2) * (ySize-2)];
 
-        var terrainTypes = TerrainTypesBank.Instance.TerrainTypes;
+        var terrainTypes = colorData.TerrainTypes;
 
-        System.Array.Sort(terrainTypes, (a, b) => a.height.CompareTo(b.height));
+        //System.Array.Sort(terrainTypes, (a, b) => a.height.CompareTo(b.height));
 
         for (int x = 0; x < xSize-2; x++)
         {
