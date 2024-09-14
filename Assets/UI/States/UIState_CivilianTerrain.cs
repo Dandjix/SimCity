@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIState_CivilianTerrain : UIState
+public class UIState_CivilianTerrain : UIStateInGame
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private HeightSetter heightSetter;
 
-    public override void Enter(UIState from)
+    public override void Enter(UIStateInGame from)
     {
         canvas.gameObject.SetActive(true);
         heightSetter.gameObject.SetActive(true);
     }
 
-    public override void Exit(UIState to)
+    public override void Exit(UIStateInGame to)
     {
         canvas.gameObject.SetActive(false);
         heightSetter.gameObject.SetActive(false);
@@ -28,7 +28,7 @@ public class UIState_CivilianTerrain : UIState
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIStateMachine.Set(UIStateMachine.UIState_Civilian);
+            UIInGameStateMachine.Set(UIInGameStateMachine.UIState_Civilian);
         }
     }
 }

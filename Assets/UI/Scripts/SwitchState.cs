@@ -15,7 +15,7 @@ public class SwitchState : MonoBehaviour
 
     private void OnClick()
     {
-        UIStateMachine.Set(uIStateName);
+        UIInGameStateMachine.Set(uIStateName);
     }
 }
 

@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIState_CivilianRoads : UIState
+public class UIState_CivilianRoads : UIStateInGame
 {
-    public override void Enter(UIState from)
+    public override void Enter(UIStateInGame from)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void Exit(UIState to)
+    public override void Exit(UIStateInGame to)
     {
         throw new System.NotImplementedException();
     }
@@ -18,7 +18,7 @@ public class UIState_CivilianRoads : UIState
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIStateMachine.Set(UIStateMachine.UIState_Civilian);
+            UIInGameStateMachine.Set(UIInGameStateMachine.UIState_Civilian);
         }
     }
 }
