@@ -27,7 +27,7 @@ public class HeightSetter : MonoBehaviour
 
     private void OnDisable()
     {
-        brush.SetActive(false);
+        brush?.SetActive(false);
     }
 
     private Color color = Color.white;

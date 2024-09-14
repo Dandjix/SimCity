@@ -37,7 +37,6 @@ public class TerrainManager : MonoBehaviour
 
     private void Start()
     {
-        //Debug.Log("calling generate : ");
         Generate();
     }
 
