@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Terrain/TerrainGenerationData")]
 public class TerrainGenerationData : UpdatableTerrainData
 {
-    [SerializeField] public int seed;
 
     [Min(0)][SerializeField] public float height = 20;
     [SerializeField] public float heightOffset = -4;

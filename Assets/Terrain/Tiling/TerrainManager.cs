@@ -56,7 +56,7 @@ public class TerrainManager : MonoBehaviour
     public TerrainPreset preset;
 
 
-    public int seed { get { return preset.terrainGenerationData.seed; } }
+    public int Seed = 0;
 
     public float height { get { return preset.terrainGenerationData.height; } }
     public float heightOffset { get { return preset.terrainGenerationData.heightOffset; } }
@@ -166,7 +166,7 @@ public class TerrainManager : MonoBehaviour
         var globalHeights = Noise.GenerateHeights(
             chunkSize * chunksOnX + 3,
             chunkSize * chunksOnY + 3,
-            seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
+            Seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
         Heights = globalHeights;
