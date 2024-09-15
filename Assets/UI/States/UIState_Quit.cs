@@ -21,6 +21,7 @@ public class UIState_Quit : UIStateInGame
 
     private void SaveAndQuit()
     {
+        SaveManager.Instance.Save();
         if (toDesktop)
         {
             Quit();

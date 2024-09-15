@@ -19,13 +19,13 @@ public class MapGrid : MonoBehaviour
     /// <summary>
     /// the x dimension of the grid, without the margin
     /// </summary>
-    public int DimensionX { get { return dimensionX; } }
+    public int DimensionX { get { return dimensionX; } set { dimensionX = value; } }
         
     [SerializeField] [Range(32,500)] private int dimensionY = 100;
     /// <summary>
     /// the y dimension of the grid, without the margin
     /// </summary>
-    public int DimensionY { get { return dimensionY; } }
+    public int DimensionY { get { return dimensionY; } set { dimensionY = value; } }
 
     public Vector2Int GetDimensions(bool marginIncluded = false)
     {
@@ -48,7 +48,7 @@ public class MapGrid : MonoBehaviour
     //public Vector2 CellDimensions { get {  return cellDimensions; } }
 
     [SerializeField][Min(1)] private int margin = 5;
-    public int Margin { get { return margin; } }
+    public int Margin { get { return margin; } set { margin = value; } }
 
     public IEnumerable<Vector2> GetAllSquaresCenter(bool withMargin = false)
     {

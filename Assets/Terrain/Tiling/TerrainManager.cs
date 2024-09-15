@@ -37,11 +37,11 @@ public class TerrainManager : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        //Debug.Log("generating terrain !");
-        Generate();
-    }
+    //private void Start()
+    //{
+    //    //Debug.Log("generating terrain !");
+    //    Generate();
+    //}
 
     public float GetMinHeight()
     {
@@ -140,36 +140,69 @@ public class TerrainManager : MonoBehaviour
     }
 
     public bool autoUpdate = false;
-
+    /// <summary>
+    /// Generates a map using Noise and the presets and whatever
+    /// </summary>
     public void Generate()
     {
-        BeforeGenerate?.Invoke();
-
-        Clear();
-
         Vector3 BLCorner = MapGrid.Instance.getCorner(CardinalDirection.SouthWest, true);
         Vector3 TRCorner = MapGrid.Instance.getCorner(CardinalDirection.NorthEast, true);
 
-        int totalX = (int)(- BLCorner.x + TRCorner.x);
-        int totalY = (int)(- BLCorner.z + TRCorner.z);
+        int totalX = (int)(-BLCorner.x + TRCorner.x);
+        int totalY = (int)(-BLCorner.z + TRCorner.z);
 
-        chunksOnX = Mathf.CeilToInt((float)totalX / chunkSize);
-        chunksOnY = Mathf.CeilToInt((float)totalY / chunkSize);
+        int chunksOnX = Mathf.CeilToInt((float)totalX / chunkSize);
+        int chunksOnY = Mathf.CeilToInt((float)totalY / chunkSize);
 
-        generatorsData = new GeneratorData[chunksOnX,chunksOnY];
-
-        //Debug.Log("numbers : "+numberOnX+" , "+numberOnY);
-
-        //var globalHeights = Noise.GenerateHeights(chunkSize*numberOnX+1, chunkSize*numberOnY+1, seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset, 
-        //    heightCurve, heightOffset, height);
-
-        var globalHeights = Noise.GenerateHeights(
+        var heights = Noise.GenerateHeights(
             chunkSize * chunksOnX + 3,
             chunkSize * chunksOnY + 3,
             Seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
             heightCurve, heightOffset, height);
 
-        Heights = globalHeights;
+        Generate(heights);
+    }
+
+    /// <summary>
+    /// Generates a map using the provided heights
+    /// </summary>
+    public void Generate(float[,] heights)
+    {
+        Vector3 BLCorner = MapGrid.Instance.getCorner(CardinalDirection.SouthWest, true);
+        Vector3 TRCorner = MapGrid.Instance.getCorner(CardinalDirection.NorthEast, true);
+
+        int totalX = (int)(-BLCorner.x + TRCorner.x);
+        int totalY = (int)(-BLCorner.z + TRCorner.z);
+
+        chunksOnX = Mathf.CeilToInt((float)totalX / chunkSize);
+        chunksOnY = Mathf.CeilToInt((float)totalY / chunkSize);
+
+        //var globalHeights = Noise.GenerateHeights(
+        //    chunkSize * chunksOnX + 3,
+        //    chunkSize * chunksOnY + 3,
+        //    Seed, scale, octaves, persistence, lacunarity, minHeight, maxHeight, globalOffset,
+        //    heightCurve, heightOffset, height);
+
+        int desiredX = chunkSize * chunksOnX + 3;
+        int desiredY = chunkSize * chunksOnY + 3;
+
+
+        if (heights.GetLength(0)!= desiredX || heights.GetLength(1)!= desiredY)
+        {
+            throw new ArgumentException("the heights provided have dimensions : (" + heights.GetLength(0) + "," + heights.GetLength(1) + ") where they should have dimensions : (" + desiredX + "," + desiredY + ").");
+        }
+
+        BeforeGenerate?.Invoke();
+
+        Clear();
+
+
+
+
+
+        generatorsData = new GeneratorData[chunksOnX,chunksOnY];
+
+        Heights = heights;
 
         //Debug.Log("lengths : " + globalHeights.GetLength(0) + ", " + globalHeights.GetLength(1));
 

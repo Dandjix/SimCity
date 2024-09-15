@@ -34,7 +34,7 @@ public class MainMenuStateMachine : MonoBehaviour
         {
             Instance.current.Exit(state);
             Instance.current.enabled = false;
-            Debug.Log("state disabled : " + state);
+            //Debug.Log("state disabled : " + state);
         }
 
 
@@ -43,7 +43,7 @@ public class MainMenuStateMachine : MonoBehaviour
 
         state.Enter(old);
         state.enabled = true;
-        Debug.Log("state enabled : " + state);
+        //Debug.Log("state enabled : " + state);
     }
 
     public static void Set(MMStateName name)
