@@ -6,7 +6,8 @@ public class City : MonoBehaviour
 {
     public static City Instance {  get; private set; }
 
-    public string Name;
+    private new string name;
+    public string Name { get { return name; } set { name = value; } }
 
     public int iron = 0;
 
