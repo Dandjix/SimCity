@@ -10,21 +10,6 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
-    /// <summary>
-    /// diimensionX and dimensionY are not the actual map size, they are just the dimensions of the heights data array for unpacking
-    /// </summary>
-    [System.Serializable]
-    private class SaveData
-    {
-        public string cityName;
-
-        public string terrainHeightsBinary;
-        public int gridDimensionX;
-        public int gridDimensionY;
-        public int margin;
-    }
-
-
     public static SaveManager Instance {  get; private set; }
 
     private void Start()
@@ -55,7 +40,7 @@ public class SaveManager : MonoBehaviour
     public bool Save()
     {
         string time = formattedTimeStamp();
-        string saveName = City.Instance.name+"("+ time + ").ssave";
+        string saveName = City.Instance.name+"("+ time + ").scsave";
         bool success = Save(saveName);
         //bool success = Save("save2.json");
         return success;
@@ -64,8 +49,17 @@ public class SaveManager : MonoBehaviour
 
     public bool Save(string saveName)
     {
-        string path = Application.persistentDataPath + "/" + saveName;
+        string path = Application.persistentDataPath + "/saves/" + saveName;
 
+
+        if(!Directory.Exists(Application.persistentDataPath))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath);
+        }
+        if (!Directory.Exists(Application.persistentDataPath + "/saves"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+        }
         if (File.Exists(path))
         {
             Debug.LogError("could not save to " + saveName + " : it already exists");
@@ -99,7 +93,7 @@ public class SaveManager : MonoBehaviour
         //File.WriteAllText(path, jsonString);
         if (success)
         {
-            Debug.Log("written data ! ");
+            Debug.Log("written data to : "+path);
         }
 
         return success;
@@ -136,11 +130,14 @@ public class SaveManager : MonoBehaviour
 
         TerrainManager.Instance.Generate(heights);
 
+        PlayTime.Instance.Initialize(data.playTime_ms);
+
         return true;
     }
 
     private void Generate()
     {
+        //Debug.Log("city : " + City.Instance);
         City.Instance.Name = "Folsom";
 
         MapGrid.Instance.DimensionX = StaticSaveDirections.dimensionX;
@@ -149,5 +146,7 @@ public class SaveManager : MonoBehaviour
         TerrainManager.Instance.Seed = StaticSaveDirections.seed;
 
         TerrainManager.Instance.Generate();
+
+        PlayTime.Instance.Initialize(0);
     }
 }

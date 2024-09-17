@@ -15,4 +15,12 @@ public class MMS_Options : MainMenuState
     {
         canvas.gameObject.SetActive(false);
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MainMenuStateMachine.Set(MMStateName.Main);
+        }
+    }
 }

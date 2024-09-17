@@ -1,21 +1,152 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MMS_Saves : MainMenuState
 {
     [SerializeField] private Canvas canvas;
 
+    [SerializeField] private Transform scrollContent;
+    [SerializeField] private GameObject saveListItemModel;
 
+    private GameObject[] savesGameObjects = new GameObject[0];
+
+    [SerializeField] private TMP_Text toLoadCityName;
+    [SerializeField] private TMP_Text toLoadPlayTime;
+    [SerializeField] private Image toLoadImage;
+
+    private string selectedPath;
+    public string SelectedPath
+    {
+        get => selectedPath;
+        set
+        {
+            selectedPath = value;
+            SelectedPathUpdated(value);
+        }
+    }
+
+    private void SelectedPathUpdated(string value)
+    {
+        foreach (var gameObject in savesGameObjects)
+        {
+            var item = gameObject.GetComponent<SaveListItem>();
+            item.Selected = item.Path == value;
+        }
+        if (value != null && value != "")
+        {
+            string text;
+            if(ScuffedCompression.ReadCompressed(value,out text))
+            {
+                SelectedSave = JsonUtility.FromJson<SaveData>(text);
+            }
+
+        }
+    }
+
+    private SaveData selectedSave;
+    private SaveData SelectedSave { get => selectedSave; set
+        {
+            selectedSave = value;
+            SelectedSaveUpdated();
+        } }
+
+    private void SelectedSaveUpdated()
+    {
+        toLoadCityName.text = selectedSave.cityName;
+        toLoadPlayTime.text = playTimeToString(selectedSave.playTime_ms);
+
+        for (int i = 0; i < savesGameObjects.Length; i++)
+        {
+            var saveGO = savesGameObjects[i];
+            var item = saveGO.GetComponent<SaveListItem>();
+            if(item.Path == selectedPath)
+            {
+                item.Selected = true;
+            }
+            else
+            {
+                item.Selected = false;
+            }
+        }
+
+    }
+
+    private string playTimeToString(int playTime_ms)
+    {
+        var timeStamp = TimeSpan.FromMilliseconds(playTime_ms);
+        string answer = string.Format("{0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
+            timeStamp.Hours,
+            timeStamp.Minutes,
+            timeStamp.Seconds,
+            timeStamp.Milliseconds);
+
+        return answer;
+    }
 
     public override void Enter(MainMenuState from)
     {
+        ReadListedSaves();
         canvas.gameObject.SetActive(true);
     }
 
     public override void Exit(MainMenuState to)
     {
         canvas.gameObject.SetActive(false);
+    }
+
+    private void EmptyListedSaves()
+    {
+        List<GameObject> list = new List<GameObject>();
+        for (int i = 0; i < savesGameObjects.Length; i++)
+        {
+            list.Add(savesGameObjects[i]);
+        }
+
+        foreach (GameObject item in list)
+        {
+            Destroy(item);
+        }
+    }
+
+    private void ReadListedSaves()
+    {
+        EmptyListedSaves();
+
+        string dir = Application.persistentDataPath + "/saves";
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        var files = Directory.GetFiles(dir);
+
+        var saves = files.Where((x) => x.EndsWith(".scsave")).ToArray<string>();
+
+        savesGameObjects = new GameObject[saves.Length];
+
+        for (int i = 0; i < saves.Length; i++)
+        {
+            Debug.Log("creating object for : " + saves[i]);
+            savesGameObjects[i] = CreateSaveGameObject(saves[i]);
+        }
+    }
+
+    private GameObject CreateSaveGameObject(string save)
+    {
+        GameObject gameObject = Instantiate(saveListItemModel);
+
+        var saveListItem = gameObject.GetComponent<SaveListItem>();
+        saveListItem.Path = save;
+
+        gameObject.transform.parent = (scrollContent);
+
+        return gameObject;
     }
 
     private void Update()
