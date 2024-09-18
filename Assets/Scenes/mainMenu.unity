@@ -4407,6 +4407,7 @@ MonoBehaviour:
   toLoadCityName: {fileID: 1866621197}
   toLoadPlayTime: {fileID: 2027939880}
   toLoadImage: {fileID: 634016572}
+  loadButton: {fileID: 79678911}
 --- !u!114 &1760303194
 MonoBehaviour:
   m_ObjectHideFlags: 0

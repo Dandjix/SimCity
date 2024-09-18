@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MMS_Saves : MainMenuState
@@ -19,6 +20,28 @@ public class MMS_Saves : MainMenuState
     [SerializeField] private TMP_Text toLoadCityName;
     [SerializeField] private TMP_Text toLoadPlayTime;
     [SerializeField] private Image toLoadImage;
+
+    [SerializeField] private Button loadButton;
+
+    private void Start()
+    {
+        loadButton.onClick.AddListener(Load);
+    }
+
+    private void Load()
+    {
+        if(!File.Exists(selectedPath))
+        {
+            Debug.LogError("could not load path at " + selectedPath);
+            ReadListedSaves();
+            return;
+        }
+
+        StaticSaveDirections.createNew = false;
+        StaticSaveDirections.savePath = selectedPath;
+
+        SceneManager.LoadScene("Game");
+    }
 
     private string selectedPath;
     public string SelectedPath

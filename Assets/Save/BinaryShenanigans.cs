@@ -5,8 +5,10 @@ using UnityEngine;
 
 public static class BinaryShenanigans
 {
-    public static byte[] FloatDoubleArrayToBinary(float[,] data)
+    public static byte[] Float2DArrayToBinary(float[,] data)
     {
+
+
         byte[] result;
         using (MemoryStream memoryStream = new MemoryStream())
         {
@@ -22,16 +24,18 @@ public static class BinaryShenanigans
             }
             result = memoryStream.ToArray();
         }
+
         return result;
     }
 
     private const int sizeOfFloat = 4;
 
-    public static float[,] BinaryToDoubleFloatArray(byte[] data, int dimensionX,int dimensionY)
+    public static float[,] BinaryToFloat2DArray(byte[] data, int dimensionX,int dimensionY)
     {
-        if(dimensionX*dimensionY*4 != data.Length)
+
+        if (dimensionX*dimensionY* sizeOfFloat != data.Length)
         {
-            throw new System.ArgumentException("data size does not match a float[" + dimensionX + "," + dimensionY + "]");
+            throw new System.ArgumentException("data size ("+ (data.Length/ sizeOfFloat) + " floats) does not match a float[" + dimensionX + "," + dimensionY + "] ("+ (dimensionX * dimensionY)+ ")");
         }
 
         int bytesIndex = 0;

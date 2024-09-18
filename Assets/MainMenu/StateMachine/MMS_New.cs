@@ -18,6 +18,13 @@ public class MMS_New : MainMenuState
 
     [SerializeField] private TMP_InputField cityName;
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            MainMenuStateMachine.Set(MMStateName.Main);
+        }
+    }
 
     public override void Enter(MainMenuState from)
     {

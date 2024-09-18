@@ -68,13 +68,23 @@ public class SaveManager : MonoBehaviour
 
         //return false;
 
+        var heights = TerrainManager.Instance.Heights;
 
+        var heightsX = heights.GetLength(0);
+        var heightsY = heights.GetLength(1);
 
-        string terrainHeightsData = System.Convert.ToBase64String(BinaryShenanigans.FloatDoubleArrayToBinary(TerrainManager.Instance.Heights));
+        string terrainHeightsData = System.Convert.ToBase64String(BinaryShenanigans.Float2DArrayToBinary(heights));
+
+        //Debug.Log("lol, xd ptdr : " + terrainHeightsData.Substring(terrainHeightsData.Length - 100, 99));
+        //Debug.Log("size of string : " + terrainHeightsData.Length);
 
         int gridDimensionX = MapGrid.Instance.DimensionX;
         int gridDimensionY = MapGrid.Instance.DimensionY;
         int margin = MapGrid.Instance.Margin;
+
+        //Debug.Log("terrainHeightsData : " + terrainHeightsData.Length);
+
+
 
         var jsonObject = new SaveData
         (
@@ -82,11 +92,16 @@ public class SaveManager : MonoBehaviour
             PlayTime.Instance.PlayTime_ms,
 
             terrainHeightsData,
+            heightsX,
+            heightsY,
+
             gridDimensionX,
             gridDimensionY,
             margin
             
         );
+        //Debug.Log("terrainHeightsData after putting it in the obj : " + jsonObject.terrainHeightsBinary.Length);
+
 
         string jsonString = JsonUtility.ToJson(jsonObject);
 
@@ -103,38 +118,58 @@ public class SaveManager : MonoBehaviour
 
     private bool Load(string path)
     {
-        if (!File.Exists(path))
+        try
         {
-            Debug.LogError("could not load save at "+path+" : file does not exist");
+            if (!File.Exists(path))
+            {
+                Debug.LogError("could not load save at " + path + " : file does not exist");
+                return false;
+            }
+
+            string text;
+            if (!ScuffedCompression.ReadCompressed(path, out text))
+            {
+                return false;
+            }
+
+            SaveData data = JsonUtility.FromJson<SaveData>(text);
+
+            //Debug.Log("lol, lmao : " + data.terrainHeightsBinary.Substring(data.terrainHeightsBinary.Length-100,99));
+
+            //Debug.Log("length of string : " + data.terrainHeightsBinary.Length);
+
+
+
+            byte[] heightsBinary = Encoding.UTF8.GetBytes(data.terrainHeightsBinary);
+
+            //Debug.Log("length binary : " + heightsBinary.Length);
+
+            MapGrid.Instance.DimensionX = data.gridDimensionX;
+            MapGrid.Instance.DimensionY = data.gridDimensionY;
+            MapGrid.Instance.Margin = data.gridMargin;
+
+
+
+            int heightsDimensionX = data.terrainheightsX;
+            int heightsDimensionY = data.terrainheightsY;
+
+            Debug.Log("dims : " + heightsDimensionX + ", " + heightsDimensionY);
+
+
+            float[,] heights = BinaryShenanigans.BinaryToFloat2DArray(heightsBinary, heightsDimensionX, heightsDimensionY);
+
+            TerrainManager.Instance.Generate(heights);
+
+            PlayTime.Instance.Initialize(data.playTime_ms);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Load error : " + ex);
             return false;
         }
-
-        string text;
-        if(!ScuffedCompression.ReadCompressed(path,out text))
-        {
-            return false;
-        }
-
-        SaveData data = JsonUtility.FromJson<SaveData>(text);
-
-        byte[] heightsBinary = Encoding.UTF8.GetBytes(data.terrainHeightsBinary);
-
-
-
-
-        MapGrid.Instance.DimensionX = data.gridDimensionX;
-        MapGrid.Instance.DimensionY = data.gridDimensionY;
-        MapGrid.Instance.Margin = data.margin;
-
-        int heightsDimensionX = data.gridDimensionX + 3;
-        int heightsDimensionY = data.gridDimensionY + 3;
-        float[,] heights = BinaryShenanigans.BinaryToDoubleFloatArray(heightsBinary, heightsDimensionX, heightsDimensionY);
-
-        TerrainManager.Instance.Generate(heights);
-
-        PlayTime.Instance.Initialize(data.playTime_ms);
-
-        return true;
+      
     }
 
     private void Generate()
@@ -145,6 +180,9 @@ public class SaveManager : MonoBehaviour
         MapGrid.Instance.DimensionX = StaticSaveDirections.dimensionX;
         MapGrid.Instance.DimensionY = StaticSaveDirections.dimensionY;
         MapGrid.Instance.Margin = StaticSaveDirections.margin;
+
+        Debug.Log("margin (gen) : " + StaticSaveDirections.margin);
+
         TerrainManager.Instance.Seed = StaticSaveDirections.seed;
         TerrainManager.Instance.Generate();
 
