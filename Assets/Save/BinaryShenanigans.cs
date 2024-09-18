@@ -24,6 +24,8 @@ public static class BinaryShenanigans
             }
             result = memoryStream.ToArray();
         }
+        Debug.Log("numberOfFloats : " + data.GetLength(0) * data.GetLength(1));
+        Debug.Log("result size/4 : " + result.Length / 4);
 
         return result;
     }

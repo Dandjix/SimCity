@@ -73,17 +73,19 @@ public class SaveManager : MonoBehaviour
         var heightsX = heights.GetLength(0);
         var heightsY = heights.GetLength(1);
 
-        string terrainHeightsData = System.Convert.ToBase64String(BinaryShenanigans.Float2DArrayToBinary(heights));
+        byte[] heightsBinary = BinaryShenanigans.Float2DArrayToBinary(heights);
 
-        //Debug.Log("lol, xd ptdr : " + terrainHeightsData.Substring(terrainHeightsData.Length - 100, 99));
-        //Debug.Log("size of string : " + terrainHeightsData.Length);
+
+        string terrainHeightsData = System.Convert.ToBase64String(heightsBinary);
+
+
+        byte[] back = System.Convert.FromBase64String(terrainHeightsData);
+
+
 
         int gridDimensionX = MapGrid.Instance.DimensionX;
         int gridDimensionY = MapGrid.Instance.DimensionY;
         int margin = MapGrid.Instance.Margin;
-
-        //Debug.Log("terrainHeightsData : " + terrainHeightsData.Length);
-
 
 
         var jsonObject = new SaveData
@@ -100,7 +102,7 @@ public class SaveManager : MonoBehaviour
             margin
             
         );
-        //Debug.Log("terrainHeightsData after putting it in the obj : " + jsonObject.terrainHeightsBinary.Length);
+        //Debug.Log("terrainHeightsData after putting it in the obj/4 : " + jsonObject.terrainHeightsBinary.Length/4);
 
 
         string jsonString = JsonUtility.ToJson(jsonObject);
@@ -136,11 +138,11 @@ public class SaveManager : MonoBehaviour
 
             //Debug.Log("lol, lmao : " + data.terrainHeightsBinary.Substring(data.terrainHeightsBinary.Length-100,99));
 
-            //Debug.Log("length of string : " + data.terrainHeightsBinary.Length);
+            //Debug.Log("length of string/4 : " + data.terrainHeightsBinary.Length/4);
 
 
 
-            byte[] heightsBinary = Encoding.UTF8.GetBytes(data.terrainHeightsBinary);
+            byte[] heightsBinary = System.Convert.FromBase64String(data.terrainHeightsBinary);
 
             //Debug.Log("length binary : " + heightsBinary.Length);
 
@@ -152,9 +154,6 @@ public class SaveManager : MonoBehaviour
 
             int heightsDimensionX = data.terrainheightsX;
             int heightsDimensionY = data.terrainheightsY;
-
-            Debug.Log("dims : " + heightsDimensionX + ", " + heightsDimensionY);
-
 
             float[,] heights = BinaryShenanigans.BinaryToFloat2DArray(heightsBinary, heightsDimensionX, heightsDimensionY);
 
