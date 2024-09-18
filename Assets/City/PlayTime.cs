@@ -5,7 +5,19 @@ using UnityEngine;
 
 public class PlayTime : MonoBehaviour
 {
-    public static PlayTime Instance { get; private set; }
+    private static PlayTime instance;
+    public static PlayTime Instance { get 
+        {
+            if (instance == null)
+                return GameObject.FindFirstObjectByType<PlayTime>();
+
+            return instance; 
+        }
+        private set 
+        { 
+            instance = value;
+        } 
+    }
 
     private void Start()
     {
@@ -51,6 +63,11 @@ public class PlayTime : MonoBehaviour
     {
         stopwatch.Start();
     }
+
+    //private void Update()
+    //{
+    //    Debug.Log("current time : "+PlayTime_ms);
+    //}
 
     public void Initialize(int sessionStart_ms)
     {

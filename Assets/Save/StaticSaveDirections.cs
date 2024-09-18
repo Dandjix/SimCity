@@ -6,6 +6,7 @@ public static class StaticSaveDirections
 {
     //if you want to create a new city
     public static bool createNew = true;
+    public static string cityName;
     public static int seed = 0;
     public static int dimensionX = 500;
     public static int dimensionY = 500;

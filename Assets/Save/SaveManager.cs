@@ -77,14 +77,16 @@ public class SaveManager : MonoBehaviour
         int margin = MapGrid.Instance.Margin;
 
         var jsonObject = new SaveData
-        {
-            cityName = City.Instance.Name,
-            terrainHeightsBinary = terrainHeightsData,
-            gridDimensionX = gridDimensionX,
-            gridDimensionY = gridDimensionY,
-            margin = margin
+        (
+            City.Instance.Name,
+            PlayTime.Instance.PlayTime_ms,
+
+            terrainHeightsData,
+            gridDimensionX,
+            gridDimensionY,
+            margin
             
-        };
+        );
 
         string jsonString = JsonUtility.ToJson(jsonObject);
 
@@ -138,13 +140,12 @@ public class SaveManager : MonoBehaviour
     private void Generate()
     {
         //Debug.Log("city : " + City.Instance);
-        City.Instance.Name = "Folsom";
+        City.Instance.Name = StaticSaveDirections.cityName;
 
         MapGrid.Instance.DimensionX = StaticSaveDirections.dimensionX;
         MapGrid.Instance.DimensionY = StaticSaveDirections.dimensionY;
         MapGrid.Instance.Margin = StaticSaveDirections.margin;
         TerrainManager.Instance.Seed = StaticSaveDirections.seed;
-
         TerrainManager.Instance.Generate();
 
         PlayTime.Instance.Initialize(0);

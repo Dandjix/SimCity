@@ -132,7 +132,7 @@ public class MMS_Saves : MainMenuState
 
         for (int i = 0; i < saves.Length; i++)
         {
-            Debug.Log("creating object for : " + saves[i]);
+            //Debug.Log("creating object for : " + saves[i]);
             savesGameObjects[i] = CreateSaveGameObject(saves[i]);
         }
     }
@@ -144,7 +144,7 @@ public class MMS_Saves : MainMenuState
         var saveListItem = gameObject.GetComponent<SaveListItem>();
         saveListItem.Path = save;
 
-        gameObject.transform.parent = (scrollContent);
+        gameObject.transform.SetParent(scrollContent,true);
 
         return gameObject;
     }

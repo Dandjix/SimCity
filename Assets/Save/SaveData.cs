@@ -15,4 +15,16 @@ public class SaveData
     public int gridDimensionX;
     public int gridDimensionY;
     public int margin;
+
+    public SaveData(string cityName, int playTime_ms,
+        string terrainheightsBinary,int gridDimensionX,int gridDimensionY,int margin)
+    {
+        this.cityName = cityName;
+        this.playTime_ms = playTime_ms;
+
+        this.terrainHeightsBinary = terrainheightsBinary;
+        this.gridDimensionX = gridDimensionX;
+        this.gridDimensionY = gridDimensionY;
+        this.margin = margin;
+    }
 }

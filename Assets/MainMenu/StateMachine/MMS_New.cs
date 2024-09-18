@@ -16,6 +16,8 @@ public class MMS_New : MainMenuState
     [SerializeField] private Slider sizeXSlider;
     [SerializeField] private Slider sizeYSlider;
 
+    [SerializeField] private TMP_InputField cityName;
+
 
     public override void Enter(MainMenuState from)
     {
@@ -46,10 +48,22 @@ public class MMS_New : MainMenuState
 
     private void CreateCity()
     {
+        if(!Validate())
+            return;
+
+        StaticSaveDirections.cityName = cityName.text;
         StaticSaveDirections.createNew = true;
         StaticSaveDirections.dimensionX = (int)sizeXSlider.value;
         StaticSaveDirections.dimensionY = (int)sizeYSlider.value;
 
         SceneManager.LoadScene("Game");
+    }
+
+    private bool Validate()
+    {
+        if(cityName.text == null || cityName.text == "")
+            return false;
+
+        return true;
     }
 }
