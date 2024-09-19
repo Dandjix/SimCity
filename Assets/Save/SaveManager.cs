@@ -161,6 +161,8 @@ public class SaveManager : MonoBehaviour
 
             PlayTime.Instance.Initialize(data.playTime_ms);
 
+            City.Instance.Name = data.cityName;
+
             return true;
         }
         catch (Exception ex)

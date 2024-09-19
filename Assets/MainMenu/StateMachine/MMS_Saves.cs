@@ -125,20 +125,33 @@ public class MMS_Saves : MainMenuState
 
     private void EmptyListedSaves()
     {
-        List<GameObject> list = new List<GameObject>();
+        List<GameObject> saveGos = new List<GameObject>();
         for (int i = 0; i < savesGameObjects.Length; i++)
         {
-            list.Add(savesGameObjects[i]);
+            saveGos.Add(savesGameObjects[i]);
         }
 
-        foreach (GameObject item in list)
+        foreach (GameObject item in saveGos)
         {
             Destroy(item);
         }
+
+        //int childrenCount = scrollContent.childCount;
+        //List<Transform> children = new List<Transform>(childrenCount);
+        //for (int i = 0; i < childrenCount; i++)
+        //{
+        //    children.Add(scrollContent.transform.GetChild(i));
+        //}
+        //foreach (Transform child in children)
+        //{
+        //    Destroy(child.gameObject);
+        //}
     }
 
     private void ReadListedSaves()
     {
+        //Debug.Log("reading listed saves ! ");
+
         EmptyListedSaves();
 
         string dir = Application.persistentDataPath + "/saves";
@@ -167,7 +180,7 @@ public class MMS_Saves : MainMenuState
         var saveListItem = gameObject.GetComponent<SaveListItem>();
         saveListItem.Path = save;
 
-        gameObject.transform.SetParent(scrollContent,true);
+        gameObject.transform.SetParent(scrollContent,false);
 
         return gameObject;
     }
