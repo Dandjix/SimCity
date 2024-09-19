@@ -17,15 +17,32 @@ public class MMS_Saves : MainMenuState
 
     private GameObject[] savesGameObjects = new GameObject[0];
 
+    [SerializeField] private GameObject saveDescription;
     [SerializeField] private TMP_Text toLoadCityName;
     [SerializeField] private TMP_Text toLoadPlayTime;
     [SerializeField] private Image toLoadImage;
 
     [SerializeField] private Button loadButton;
+    [SerializeField] private Button deleteButton;
+
+    [SerializeField] private ConfirmSaveDeletion confirmDeletion;
 
     private void Start()
     {
         loadButton.onClick.AddListener(Load);
+        deleteButton.onClick.AddListener(DeleteButtonClicked);
+        SelectedSaveUpdated();
+
+        confirmDeletion.onConfirm += () =>
+        {
+            confirmDeletion.gameObject.SetActive(false);
+            Delete();
+        };
+
+        confirmDeletion.onCancel += () =>
+        {
+            confirmDeletion.gameObject.SetActive(false);
+        };
     }
 
     private void Load()
@@ -41,6 +58,31 @@ public class MMS_Saves : MainMenuState
         StaticSaveDirections.savePath = selectedPath;
 
         SceneManager.LoadScene("Game");
+    }
+
+    private void DeleteButtonClicked()
+    {
+        if(confirmDeletion.dontAsk)
+        {
+            Delete();
+            return;
+        }
+
+        confirmDeletion.SaveName = SaveNameManipulation.GetSaveName(selectedPath);
+        confirmDeletion.gameObject.SetActive(true);
+    }
+
+    private void Delete()
+    {
+        if (!File.Exists(selectedPath))
+        {
+            Debug.LogError("could not delete at " + selectedPath);
+            ReadListedSaves();
+            return;
+        }
+
+        File.Delete(selectedPath);
+        ReadListedSaves();
     }
 
     private string selectedPath;
@@ -81,6 +123,13 @@ public class MMS_Saves : MainMenuState
 
     private void SelectedSaveUpdated()
     {
+        if(selectedSave == null)
+        {
+            saveDescription.SetActive(false);
+            return;
+        }
+        saveDescription.SetActive(true);
+
         toLoadCityName.text = selectedSave.cityName;
         toLoadPlayTime.text = playTimeToString(selectedSave.playTime_ms);
 
@@ -121,6 +170,7 @@ public class MMS_Saves : MainMenuState
     public override void Exit(MainMenuState to)
     {
         canvas.gameObject.SetActive(false);
+        SelectedSave = null;
     }
 
     private void EmptyListedSaves()
@@ -152,6 +202,7 @@ public class MMS_Saves : MainMenuState
     {
         //Debug.Log("reading listed saves ! ");
 
+        SelectedSave = null;
         EmptyListedSaves();
 
         string dir = Application.persistentDataPath + "/saves";
@@ -187,9 +238,19 @@ public class MMS_Saves : MainMenuState
 
     private void Update()
     {
+        if (confirmDeletion.isActiveAndEnabled)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                confirmDeletion.gameObject.SetActive(false);
+            }
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             MainMenuStateMachine.Set(MMStateName.Main);
         }
+
     }
 }

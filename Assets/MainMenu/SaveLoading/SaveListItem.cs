@@ -14,7 +14,7 @@ public class SaveListItem : MonoBehaviour
         get => path;
         set { 
             path = value;
-            Text = GetSaveName(path);
+            Text = SaveNameManipulation.GetSaveName(path);
         }
     }
 
@@ -53,10 +53,5 @@ public class SaveListItem : MonoBehaviour
         MainMenuStateMachine.Saves.SelectedPath = path;
     }
 
-    private string GetSaveName(string save)
-    {
-        var split = save.Split('\\');
-        string name = split[split.Length - 1].Split('.')[0];
-        return name;
-    }
+
 }
