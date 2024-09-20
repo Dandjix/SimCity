@@ -1,57 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class SaveListItem : MonoBehaviour
+namespace MainMenu
 {
-    [SerializeField] private TMP_Text text;
 
-    private string path;
-    public string Path
-    {
-        get => path;
-        set { 
-            path = value;
-            Text = SaveNameManipulation.GetSaveName(path);
-        }
-    }
+    using System.Collections;
+    using System.Collections.Generic;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    private bool selected;
-    public bool Selected
+    public class SaveListItem : MonoBehaviour
     {
-        get => selected;
-        set
+        [SerializeField] private TMP_Text text;
+
+        private string path;
+        public string Path
         {
-            if (value)
+            get => path;
+            set
             {
-                text.color = Color.green;
+                path = value;
+                Text = SaveNameManipulation.GetSaveName(path);
             }
-            else
-            {
-                text.color = Color.blue;
-            }
-            selected = value;
         }
-    }
 
-    private string Text
-    {
-        get => text.text;
-        set => text.text = value;
-    }
+        private bool selected;
+        public bool Selected
+        {
+            get => selected;
+            set
+            {
+                if (value)
+                {
+                    text.color = Color.green;
+                }
+                else
+                {
+                    text.color = Color.blue;
+                }
+                selected = value;
+            }
+        }
 
-    [SerializeField] private Button button;
+        private string Text
+        {
+            get => text.text;
+            set => text.text = value;
+        }
 
-    private void Start()
-    {
-        button.onClick.AddListener(Click);
-    }
-    private void Click()
-    {
-        MainMenuStateMachine.Saves.SelectedPath = path;
-    }
+        [SerializeField] private Button button;
 
+        private void Start()
+        {
+            button.onClick.AddListener(Click);
+        }
+        private void Click()
+        {
+            MainMenuStateMachine.Saves.SelectedPath = path;
+        }
+
+
+    }
 
 }

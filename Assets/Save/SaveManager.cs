@@ -175,14 +175,12 @@ public class SaveManager : MonoBehaviour
 
     private void Generate()
     {
-        //Debug.Log("city : " + City.Instance);
         City.Instance.Name = StaticSaveDirections.cityName;
 
         MapGrid.Instance.DimensionX = StaticSaveDirections.dimensionX;
         MapGrid.Instance.DimensionY = StaticSaveDirections.dimensionY;
         MapGrid.Instance.Margin = StaticSaveDirections.margin;
 
-        Debug.Log("margin (gen) : " + StaticSaveDirections.margin);
 
         TerrainManager.Instance.Seed = StaticSaveDirections.seed;
         TerrainManager.Instance.Generate();

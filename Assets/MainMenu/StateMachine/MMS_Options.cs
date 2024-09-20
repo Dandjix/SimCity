@@ -1,26 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class MMS_Options : MainMenuState
+namespace MainMenu
 {
-    [SerializeField] private Canvas canvas;   
 
-    public override void Enter(MainMenuState from)
-    {
-        canvas.gameObject.SetActive(true);
-    }
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    public override void Exit(MainMenuState to)
+    public class MMS_Options : MainMenuState
     {
-        canvas.gameObject.SetActive(false);
-    }
+        [SerializeField] private Canvas canvas;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        public override void Enter(MainMenuState from)
         {
-            MainMenuStateMachine.Set(MMStateName.Main);
+            canvas.gameObject.SetActive(true);
+        }
+
+        public override void Exit(MainMenuState to)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                MainMenuStateMachine.Set(MMStateName.Main);
+            }
         }
     }
 }

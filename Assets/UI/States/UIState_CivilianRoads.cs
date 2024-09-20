@@ -6,12 +6,12 @@ public class UIState_CivilianRoads : UIStateInGame
 {
     public override void Enter(UIStateInGame from)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void Exit(UIStateInGame to)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     private void Update()
