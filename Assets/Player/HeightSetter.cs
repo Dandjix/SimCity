@@ -27,6 +27,9 @@ public class HeightSetter : MonoBehaviour
 
     private void OnDisable()
     {
+        if(brush ==  null)
+            return;
+
         brush?.SetActive(false);
     }
 

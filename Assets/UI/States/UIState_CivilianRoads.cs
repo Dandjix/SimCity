@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class UIState_CivilianRoads : UIStateInGame
 {
+    [SerializeField] private GameObject RoadSelectionManager;
+    //[SerializeField] private SelectionRenderer selectionRenderer;
+    //[SerializeField] private SelectionLine selectionLine;
+
     public override void Enter(UIStateInGame from)
     {
-        //throw new System.NotImplementedException();
+        RoadSelectionManager.SetActive(true);
     }
 
     public override void Exit(UIStateInGame to)
     {
-        //throw new System.NotImplementedException();
+        RoadSelectionManager.SetActive(false);
     }
 
     private void Update()
