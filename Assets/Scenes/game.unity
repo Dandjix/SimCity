@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca26a3ba5db1e884a8b9c856204292ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadsPathGrid: {fileID: 0}
+  roadsPathGrid: {fileID: 401736268}
 --- !u!1 &221799994
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,8 +858,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variants:
-  - gameObject: {fileID: 5975114432051365686, guid: c80d7601a14af8946bb25ea27a582028, type: 3}
-    directions: 
   - gameObject: {fileID: 5975114432051365686, guid: dd9b7883c9dbdd0498c2dfaaad6abdb7, type: 3}
     directions: 0200000006000000
   - gameObject: {fileID: 5975114432051365686, guid: 22bce4d66a553d64589c036f5835e8c5, type: 3}
@@ -882,8 +880,18 @@ MonoBehaviour:
     directions: 0400000006000000
   - gameObject: {fileID: 5975114432051365686, guid: 30286d852fdb53048adfb20f8283564d, type: 3}
     directions: 040000000600000002000000
+  - gameObject: {fileID: 5975114432051365686, guid: a56972b122cf66f4593ae77ec54e94b9, type: 3}
+    directions: 00000000
+  - gameObject: {fileID: 5975114432051365686, guid: a40fafef162f48847b38cd997768835a, type: 3}
+    directions: 04000000
+  - gameObject: {fileID: 5975114432051365686, guid: f8ef49c3815e8e5458813e29cdb9b2df, type: 3}
+    directions: 02000000
+  - gameObject: {fileID: 5975114432051365686, guid: 01fb1864fc3f210498f14d278a06a20d, type: 3}
+    directions: 06000000
+  - gameObject: {fileID: 5975114432051365686, guid: c80d7601a14af8946bb25ea27a582028, type: 3}
+    directions: 
   heightType: 0
-  heightOffset: 15
+  heightOffset: 75
 --- !u!1 &505611978
 GameObject:
   m_ObjectHideFlags: 0

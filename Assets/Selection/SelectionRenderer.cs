@@ -65,7 +65,6 @@ public class SelectionRenderer : MonoBehaviour
     private void Rectangle(Vector3 center, Vector2 size)
     {
         //Debug.Log("rectangle : " + center + ", size : " + size);
-
         projector.transform.position = new Vector3(center.x+0.5f, height,center.z+0.5f);
 
         projector.size = new Vector3(size.x+1, size.y+1, projector.size.z );

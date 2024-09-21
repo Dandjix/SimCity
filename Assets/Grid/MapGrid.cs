@@ -27,6 +27,14 @@ public class MapGrid : MonoBehaviour
     /// </summary>
     public int DimensionY { get { return dimensionY; } set { dimensionY = value; } }
 
+    public int DimensionXWithMargin { 
+        get { return dimensionX+margin*2; } 
+    }
+    public int DimensionYWithMargin
+    {
+        get { return dimensionY + margin * 2; }
+    }
+
     public Vector2Int GetDimensions(bool marginIncluded = false)
     {
         if(marginIncluded)
@@ -234,6 +242,13 @@ public class MapGrid : MonoBehaviour
         float y = square.y*cellDimensions.y + cellDimensions.y/2;
         return new Vector2(x,y);
     }
+
+    public Vector2 GetCenterNoHeight(int x, int y)
+    {
+        Vector2Int vector2 = new Vector2Int(x,y);
+        return GetCenterNoHeight(vector2);
+    }
+
     /// <summary>
     /// with height taken into account. This probably should only be called at runtime
     /// </summary>
@@ -245,6 +260,10 @@ public class MapGrid : MonoBehaviour
         float y = square.y * cellDimensions.y + cellDimensions.y / 2;
         float height = TerrainManager.Instance.GetHeightAtCenter(square);
         return new Vector3(x,height, y);
+    }
+    public Vector3 GetCenter(int x, int y)
+    {
+        return GetCenter(new Vector2Int(x, y));
     }
     /// <summary>
     /// 

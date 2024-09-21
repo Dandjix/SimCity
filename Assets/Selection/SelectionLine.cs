@@ -125,6 +125,15 @@ public class LineData
         Vector2Int step;
         int xDiff = from.x - to.x;
         int yDiff = from.y - to.y;
+        if (xDiff < 0 || yDiff < 0)
+        {
+            Vector2Int temp = from;
+            from = to;
+            to = temp;
+            xDiff = from.x - to.x;
+            yDiff = from.y - to.y;
+        }
+
         int length;
         if (xDiff == 0 && yDiff == 0)
         {
@@ -140,22 +149,22 @@ public class LineData
         if (yDiff < 0)
         {
             step = new Vector2Int(0, 1);
-            length = -yDiff;
+            length = -yDiff + 1;
         }
         else if (yDiff > 0)
         {
             step = new Vector2Int(0, -1);
-            length = yDiff;
+            length = yDiff + 1;
         }
         else if (xDiff < 0)
         {
             step = new Vector2Int(1, 0);
-            length = -xDiff;
+            length = -xDiff + 1;
         }
         else
         {
             step = new Vector2Int(-1, 0);
-            length = xDiff;
+            length = xDiff + 1;
         }
 
         Vector2Int pos = from;
@@ -163,7 +172,7 @@ public class LineData
 
         for (int i = 0; i < length; i++)
         {
-            positionsInLine[i] = step;
+            positionsInLine[i] =pos;
             pos = pos + step;
         }
 
