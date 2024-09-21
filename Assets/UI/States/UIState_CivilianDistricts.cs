@@ -1,24 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class UIState_CivilianDistricts : UIStateInGame
+namespace UIInGameStateMachine
 {
-    public override void Enter(UIStateInGame from)
-    {
-        //throw new System.NotImplementedException();
-    }
 
-    public override void Exit(UIStateInGame to)
-    {
-        //throw new System.NotImplementedException();
-    }
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    private void Update()
+    public class UIState_CivilianDistricts : UIStateInGame
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        public override void Enter(UIStateInGame from)
         {
-            UIInGameStateMachine.Set(UIInGameStateMachine.UIState_Civilian);
+            //throw new System.NotImplementedException();
+        }
+
+        public override void Exit(UIStateInGame to)
+        {
+            //throw new System.NotImplementedException();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIInGameStateMachine.Set(UIInGameStateMachine.UIState_Civilian);
+            }
         }
     }
 }

@@ -1,9 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+namespace UIInGameStateMachine
+{
 
-public abstract class UIStateInGame : MonoBehaviour {
-    public abstract void Enter(UIStateInGame from);
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    public abstract void Exit(UIStateInGame to);
+    public abstract class UIStateInGame : MonoBehaviour {
+        public abstract void Enter(UIStateInGame from);
+
+        public abstract void Exit(UIStateInGame to);
+    }
+
 }

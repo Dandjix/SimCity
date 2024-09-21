@@ -1,76 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-
-public class UIState_Quit : UIStateInGame
+namespace UIInGameStateMachine
 {
-    [SerializeField] private Canvas canvas;
 
-    [SerializeField] private Button saveAndQuit;
-    [SerializeField] private Button quitWithoutSaving;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+    using UnityEngine.UI;
 
-    public bool toDesktop = false;
-
-    private void Start()
+    public class UIState_Quit : UIStateInGame
     {
-        saveAndQuit.onClick.AddListener(SaveAndQuit);
-        quitWithoutSaving.onClick.AddListener(QuitWithoutSaving);
-    }
+        [SerializeField] private Canvas canvas;
 
-    private void SaveAndQuit()
-    {
-        SaveManager.Instance.Save();
-        if (toDesktop)
+        [SerializeField] private Button saveAndQuit;
+        [SerializeField] private Button quitWithoutSaving;
+
+        public bool toDesktop = false;
+
+        private void Start()
         {
-            Quit();
+            saveAndQuit.onClick.AddListener(SaveAndQuit);
+            quitWithoutSaving.onClick.AddListener(QuitWithoutSaving);
         }
-        else
+
+        private void SaveAndQuit()
         {
-            LoadMainMenu();
+            SaveManager.Instance.Save();
+            if (toDesktop)
+            {
+                Quit();
+            }
+            else
+            {
+                LoadMainMenu();
+            }
         }
-    }
 
-    private void QuitWithoutSaving()
-    {
-        if (toDesktop)
+        private void QuitWithoutSaving()
         {
-            Quit();
+            if (toDesktop)
+            {
+                Quit();
+            }
+            else
+            {
+                LoadMainMenu();
+            }
         }
-        else
+
+        private void LoadMainMenu()
         {
-            LoadMainMenu();
+            SceneManager.LoadScene("MainMenu");
         }
-    }
 
-    private void LoadMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    private void Quit()
-    {
-        Debug.Log("quitting ...");
-        Application.Quit();
-        Debug.Log("done !");
-    }
-
-    public override void Enter(UIStateInGame from)
-    {
-        canvas.gameObject.SetActive(true);
-    }
-
-    public override void Exit(UIStateInGame to)
-    {
-        canvas.gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        private void Quit()
         {
-            UIInGameStateMachine.Set(UIStateName.UIState_Escape);
+            Debug.Log("quitting ...");
+            Application.Quit();
+            Debug.Log("done !");
+        }
+
+        public override void Enter(UIStateInGame from)
+        {
+            canvas.gameObject.SetActive(true);
+        }
+
+        public override void Exit(UIStateInGame to)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIInGameStateMachine.Set(UIStateName.UIState_Escape);
+            }
         }
     }
 }

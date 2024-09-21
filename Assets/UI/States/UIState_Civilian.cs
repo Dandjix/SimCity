@@ -1,26 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class UIState_Civilian : UIStateInGame
+namespace UIInGameStateMachine
 {
-    [SerializeField] Canvas Canvas;
 
-    public override void Enter(UIStateInGame from)
-    {
-        Canvas.gameObject.SetActive(true);
-    }
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    public override void Exit(UIStateInGame to)
+    public class UIState_Civilian : UIStateInGame
     {
-        Canvas.gameObject.SetActive(false);
-    }
+        [SerializeField] Canvas Canvas;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        public override void Enter(UIStateInGame from)
         {
-            UIInGameStateMachine.Set(UIStateName.UIState_Escape);
+            Canvas.gameObject.SetActive(true);
+        }
+
+        public override void Exit(UIStateInGame to)
+        {
+            Canvas.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIInGameStateMachine.Set(UIStateName.UIState_Escape);
+            }
         }
     }
 }

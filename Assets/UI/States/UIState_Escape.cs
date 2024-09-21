@@ -1,50 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class UIState_Escape : UIStateInGame
+namespace UIInGameStateMachine
 {
-    [SerializeField] private Canvas canvas;
 
-    [SerializeField] private Button ExitToMainMenuButton;
-    [SerializeField] private Button ExitToDesktopButton;
-    private UIStateInGame from;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    private void Start()
+    public class UIState_Escape : UIStateInGame
     {
-        ExitToMainMenuButton.onClick.AddListener(ExitToMainMenu);
-        ExitToDesktopButton.onClick.AddListener(ExitToDesktop);
-    }
+        [SerializeField] private Canvas canvas;
 
-    private void ExitToMainMenu()
-    {
-        UIInGameStateMachine.UIState_Quit.toDesktop = false;
-        UIInGameStateMachine.Set(UIStateName.UIState_Quit);
-    }
+        [SerializeField] private Button ExitToMainMenuButton;
+        [SerializeField] private Button ExitToDesktopButton;
+        private UIStateInGame from;
 
-    private void ExitToDesktop()
-    {
-        UIInGameStateMachine.UIState_Quit.toDesktop = true;
-        UIInGameStateMachine.Set(UIStateName.UIState_Quit);
-    }
-
-    public override void Enter(UIStateInGame from)
-    {
-        this.from = from;
-        canvas.gameObject.SetActive(true);
-    }
-
-    public override void Exit(UIStateInGame to)
-    {
-        canvas.gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        private void Start()
         {
-            UIInGameStateMachine.Set(from);
+            ExitToMainMenuButton.onClick.AddListener(ExitToMainMenu);
+            ExitToDesktopButton.onClick.AddListener(ExitToDesktop);
+        }
+
+        private void ExitToMainMenu()
+        {
+            UIInGameStateMachine.UIState_Quit.toDesktop = false;
+            UIInGameStateMachine.Set(UIStateName.UIState_Quit);
+        }
+
+        private void ExitToDesktop()
+        {
+            UIInGameStateMachine.UIState_Quit.toDesktop = true;
+            UIInGameStateMachine.Set(UIStateName.UIState_Quit);
+        }
+
+        public override void Enter(UIStateInGame from)
+        {
+            this.from = from;
+            canvas.gameObject.SetActive(true);
+        }
+
+        public override void Exit(UIStateInGame to)
+        {
+            canvas.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIInGameStateMachine.Set(from);
+            }
         }
     }
 }
