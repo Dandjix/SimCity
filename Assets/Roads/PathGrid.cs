@@ -31,7 +31,7 @@ public class PathGrid : MonoBehaviour
         {
             newAdjacency.Connect(directions[i]);
         }
-        adjacencyGrid[x, y] = newAdjacency;
+
 
         //Debug.Log("updated adjacency : "+newAdjacency);
 
@@ -42,6 +42,7 @@ public class PathGrid : MonoBehaviour
 
         if (FindVariant(newAdjacency, out variant))
         {
+            adjacencyGrid[x, y] = newAdjacency;
             InstantiateAsset(variant,x,y);
             return true;
         }
