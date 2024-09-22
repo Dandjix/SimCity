@@ -19,6 +19,7 @@ namespace StatusGrid
         /// this is gonna get called each time a status is changed, and a bunch of times when the status is set
         /// </summary>
         public event System.Action<Vector2Int,Status,Status> StatusChanged;
+        public event System.Action StatusCommited;
 
         private void Awake()
         {
@@ -40,7 +41,13 @@ namespace StatusGrid
         {
             SetStatus(status, position.x,position.y, on);
         }
-
+        /// <summary>
+        /// you have to call commit status when you are done or you wont be able to see the statuses
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="on"></param>
         public void SetStatus(StatusType status,int x, int y, bool on=true)
         {
             Status before = statuses[x, y];
@@ -56,6 +63,11 @@ namespace StatusGrid
                 StatusChanged?.Invoke(new Vector2Int(x, y), before, after);
                 //Debug.Log("invoked");
             }
+        }
+
+        public void CommitStatus()
+        {
+            StatusCommited?.Invoke();
         }
 
 

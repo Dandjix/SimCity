@@ -8,6 +8,8 @@ namespace StatusGrid
 
     public class StatusGridAppearance : MonoBehaviour
     {
+        private bool startHasBeenCalled = false;
+
         public static StatusGridAppearance Instance { get; private set; }
 
         [SerializeField] private HeightType heightType;
@@ -45,6 +47,8 @@ namespace StatusGrid
 
         private void Start()
         {
+            startHasBeenCalled = true;
+
             SetupProjector();
             GenerateTexture();
         }
@@ -52,12 +56,28 @@ namespace StatusGrid
         private void OnEnable()
         {
             StatusGrid.Instance.StatusChanged += StatusChanged;
+            StatusGrid.Instance.StatusCommited += CommitTexture;
+
+            projector.gameObject.SetActive(true);
+
+            if(startHasBeenCalled)
+            {
+                GenerateTexture();
+            }
             //GenerateTexture();
         }
 
         private void OnDisable()
         {
             StatusGrid.Instance.StatusChanged -= StatusChanged;
+            StatusGrid.Instance.StatusCommited -= CommitTexture;
+
+            if(projector != null && projector.isActiveAndEnabled)
+            {
+                projector.gameObject?.SetActive(false);
+            }
+
+
             //DeleteTexture();
         }
 
@@ -155,9 +175,13 @@ namespace StatusGrid
 
             texture.SetPixel(position.x,position.y, color);
 
+        }
+
+        private void CommitTexture()
+        {
             texture.Apply();
 
-            projector.material.mainTexture = texture;
+            projector.material.SetTexture("Base_Map", texture);
         }
     }
 
