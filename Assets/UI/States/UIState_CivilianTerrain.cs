@@ -22,10 +22,10 @@ namespace UIInGameStateMachine
             heightSetter.gameObject.SetActive(false);
         }
 
-        private void Start()
-        {
-            heightSetter.gameObject.SetActive(false);
-        }
+        //private void Start()
+        //{
+        //    heightSetter.gameObject.SetActive(false);
+        //}
 
         private void Update()
         {

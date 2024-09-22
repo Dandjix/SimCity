@@ -150,7 +150,7 @@ struct Adjacency
 
     public bool Connected(CardinalDirection direction)
     {
-        byte mask = (byte)(1 << ((byte)direction));
+        byte mask = (byte)(1 << ((int)direction));
         return (adjacency & mask) != 0;
     }
 
@@ -158,7 +158,7 @@ struct Adjacency
     {
         //adjacency = adjacency
         //Debug.Log("direction : " + (byte)direction);
-        byte mask =  (byte) (1 << ((byte)direction));
+        byte mask =  (byte) (1 << ((int)direction));
         //Debug.Log("Connect mask : "+mask);
         adjacency = (byte) (adjacency | mask);
     }
@@ -167,7 +167,7 @@ struct Adjacency
     {
         //adjacency = adjacency
         //Debug.Log("direction : " + (byte)direction);
-        byte mask = (byte)(1 << ((byte)direction));
+        byte mask = (byte)(1 << ((int)direction));
         byte invertedMask = (byte)~mask;
         //Debug.Log("Connect mask : "+mask);
         adjacency = (byte)(adjacency & invertedMask);

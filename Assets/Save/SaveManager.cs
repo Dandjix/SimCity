@@ -163,6 +163,8 @@ public class SaveManager : MonoBehaviour
 
             City.Instance.Name = data.cityName;
 
+            //Debug.Log("loaded : "+MapGrid.Instance.DimensionX+", "+MapGrid.Instance.DimensionY);
+
             return true;
         }
         catch (Exception ex)
@@ -186,5 +188,7 @@ public class SaveManager : MonoBehaviour
         TerrainManager.Instance.Generate();
 
         PlayTime.Instance.Initialize(0);
+
+        //Debug.Log("generated : " + MapGrid.Instance.DimensionX + ", " + MapGrid.Instance.DimensionY);
     }
 }
