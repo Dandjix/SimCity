@@ -47,14 +47,33 @@ namespace StatusGrid
             }
         }
 
-        private void Start()
+        private void OnEnable()
         {
             StatusGrid.Instance.StatusChanged += StatusChanged;
+            GenerateStatuses();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             StatusGrid.Instance.StatusChanged -= StatusChanged;
+            DeleteStatuses();
+        }
+
+        private void GenerateStatuses()
+        {
+            foreach(var square in MapGrid.Instance.GetAllSquares())
+            {
+                StatusChanged(square, new Status(), StatusGrid.Instance.GetStatus(square));
+            }
+        }
+
+        private void DeleteStatuses()
+        {
+            foreach(var pair in markers)
+            {
+                Destroy(markers[pair.Key].gameObject);
+            }
+            markers.Clear();
         }
 
         private void StatusChanged(Vector2Int position, Status oldStatus, Status newStatus)

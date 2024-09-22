@@ -10,7 +10,7 @@ public class PathGrid : MonoBehaviour
 {
     private Dictionary<Vector2Int, GameObject> pathsObjects = new Dictionary<Vector2Int, GameObject>();
     //public Adjacency[,] Ad
-    private Adjacency[,] adjacencyGrid;
+    private PathCell[,] adjacencyGrid;
 
     private static PathGrid instance;
     public static PathGrid Instance {  get { return instance; } }
@@ -19,14 +19,14 @@ public class PathGrid : MonoBehaviour
     {
         instance = this;
 
-        adjacencyGrid = new Adjacency[MapGrid.Instance.DimensionX, MapGrid.Instance.DimensionY];
+        adjacencyGrid = new PathCell[MapGrid.Instance.DimensionX, MapGrid.Instance.DimensionY];
     }
 
     public bool TryConnect(int x, int y, CardinalDirection[] directions)
     {
         //Debug.Log("connecting : "+x+", "+y+"\nadjGridSize : "+adjacencyGrid.GetLength(0)+", "+adjacencyGrid.GetLength(1));  
 
-        Adjacency newAdjacency = adjacencyGrid[x, y];
+        PathCell newAdjacency = adjacencyGrid[x, y];
         for (int i = 0; i < directions.Length; i++)
         {
             newAdjacency.Connect(directions[i]);
@@ -84,7 +84,7 @@ public class PathGrid : MonoBehaviour
         pathsObjects.Add(new Vector2Int(x, y), asset);
     }
 
-    private bool FindVariant(Adjacency adjacency, out Variant result)
+    private bool FindVariant(PathCell adjacency, out Variant result)
     {
         for (int i = 0; i < variants.Length; i++)
         {
@@ -102,7 +102,7 @@ public class PathGrid : MonoBehaviour
         return false;
     }
 
-    private bool isCorrectVariant(Variant variant, Adjacency adjacency)
+    private bool isCorrectVariant(Variant variant, PathCell adjacency)
     {
         foreach (CardinalDirection direction in Enum.GetValues(typeof(CardinalDirection)))
         {
@@ -144,9 +144,11 @@ enum HeightType
 }
 
 
-struct Adjacency
+struct PathCell
 {
     private byte adjacency;
+
+    private bool isTunnel;
 
     public bool Connected(CardinalDirection direction)
     {

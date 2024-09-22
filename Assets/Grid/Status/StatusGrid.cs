@@ -7,6 +7,7 @@ namespace StatusGrid
     using System.Drawing;
     using System.Text;
     using UnityEngine;
+    using UnityEngine.UIElements;
 
     public class StatusGrid : MonoBehaviour
     {
@@ -55,6 +56,18 @@ namespace StatusGrid
                 StatusChanged?.Invoke(new Vector2Int(x, y), before, after);
                 //Debug.Log("invoked");
             }
+        }
+
+
+
+        public Status GetStatus(Vector2Int position)
+        {
+            return GetStatus(position.x,position.y);
+        }
+
+        public Status GetStatus(int x, int y)
+        {
+            return statuses[x, y];
         }
 
 

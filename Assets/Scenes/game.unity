@@ -4047,8 +4047,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1844914726}
   - component: {fileID: 1844914728}
-  - component: {fileID: 1844914727}
   - component: {fileID: 1844914729}
+  - component: {fileID: 1844914727}
   m_Layer: 0
   m_Name: StatusGrid
   m_TagString: Untagged
@@ -4078,7 +4078,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844914725}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 582789b4263bb2440bd925c0aeae6784, type: 3}
   m_Name: 
