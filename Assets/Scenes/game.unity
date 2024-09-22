@@ -4047,7 +4047,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1844914726}
   - component: {fileID: 1844914728}
-  - component: {fileID: 1844914729}
   - component: {fileID: 1844914727}
   m_Layer: 0
   m_Name: StatusGrid
@@ -4097,18 +4096,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20bf76f06a1116a498df62cd8a677de7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1844914729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844914725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba518833a9094e4a9c2da1957107ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1920001839

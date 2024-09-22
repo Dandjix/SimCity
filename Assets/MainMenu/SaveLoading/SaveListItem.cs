@@ -11,6 +11,9 @@ namespace MainMenu
     {
         [SerializeField] private TMP_Text text;
 
+        [SerializeField] private Color normalColor;
+        [SerializeField] private Color selectedColor;
+
         private string path;
         public string Path
         {
@@ -30,11 +33,11 @@ namespace MainMenu
             {
                 if (value)
                 {
-                    text.color = Color.green;
+                    text.color = selectedColor;
                 }
                 else
                 {
-                    text.color = Color.blue;
+                    text.color = normalColor;
                 }
                 selected = value;
             }
@@ -50,6 +53,7 @@ namespace MainMenu
 
         private void Start()
         {
+            text.color = normalColor;
             button.onClick.AddListener(Click);
         }
         private void Click()
