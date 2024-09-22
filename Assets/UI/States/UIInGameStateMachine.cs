@@ -12,9 +12,11 @@ namespace UIInGameStateMachine
     [RequireComponent(typeof(UIState_CivilianTerrain))]
     [RequireComponent(typeof(UIState_CivilianDistricts))]
     [RequireComponent(typeof(UIState_CivilianRoads))]
+    [RequireComponent(typeof(UIState_CivilianBuildings))]
     [RequireComponent(typeof(UIState_Military))]
     [RequireComponent(typeof(UIState_Escape))]
     [RequireComponent(typeof(UIState_Quit))]
+
     public class UIInGameStateMachine : MonoBehaviour
     {
         public static UIInGameStateMachine Instance { get; private set; }
@@ -27,6 +29,7 @@ namespace UIInGameStateMachine
             UIState_CivilianTerrain = GetComponent<UIState_CivilianTerrain>();
             UIState_CivilianDistricts = GetComponent<UIState_CivilianDistricts>();
             UIState_CivilianRoads = GetComponent<UIState_CivilianRoads>();
+            UIState_CivilianBuildings = GetComponent<UIState_CivilianBuildings>();
 
             UIState_Military = GetComponent<UIState_Military>();
 
@@ -42,6 +45,7 @@ namespace UIInGameStateMachine
         public static UIState_CivilianTerrain UIState_CivilianTerrain { get; private set; }
         public static UIState_CivilianDistricts UIState_CivilianDistricts { get; private set; }
         public static UIState_CivilianRoads UIState_CivilianRoads { get; private set; }
+        public static UIState_CivilianBuildings UIState_CivilianBuildings { get; private set; }
 
         public static UIState_Military UIState_Military { get; private set; }
 
@@ -80,15 +84,21 @@ namespace UIInGameStateMachine
                 case UIStateName.UIState_CivilianDistricts:
                     Set(UIState_CivilianDistricts);
                     return;
+                case UIStateName.UIState_CivilianBuildings:
+                    Set(UIState_CivilianBuildings);
+                    return;
+
                 case UIStateName.UIState_Military:
                     Set(UIState_Military);
                     return;
+
                 case UIStateName.UIState_Escape:
                     Set(UIState_Escape);
                     return;
                 case UIStateName.UIState_Quit:
                     Set(UIState_Quit);
                     return;
+
 
 
                     //Debug.LogError("INVALID STATE NAME : " + name);
@@ -101,6 +111,7 @@ namespace UIInGameStateMachine
         UIState_CivilianTerrain,
         UIState_CivilianRoads,
         UIState_CivilianDistricts,
+        UIState_CivilianBuildings,
         UIState_Military,
         UIState_Escape,
         UIState_Quit
