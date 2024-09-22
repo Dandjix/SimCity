@@ -41,7 +41,9 @@ public class MapGrid : MonoBehaviour
             return new Vector2Int(dimensionX + margin*2, dimensionY + margin*2);
         return new Vector2Int(dimensionX, dimensionY);
     }
-
+    /// <summary>
+    /// the center of the playable area
+    /// </summary>
     public Vector2 Center
     {
         get

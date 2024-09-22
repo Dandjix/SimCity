@@ -1,10 +1,10 @@
 namespace StatusGrid
 {
-
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-    using UnityEngine.Timeline;
+
 
     public class StatusGridAppearance : MonoBehaviour
     {
@@ -14,16 +14,12 @@ namespace StatusGrid
 
         [SerializeField] private float heightOffset = 75;
 
-        [SerializeField] private Material baseMaterial;
-        public Material BaseMaterial { get => baseMaterial; }
+        [SerializeField] private Texture2D texture;
 
         public readonly Dictionary<StatusType, Color> ColorsForStatusTypes = new Dictionary<StatusType, Color>();
 
-        private Dictionary<Vector2Int, StatusGridMarker> markers = new Dictionary<Vector2Int,StatusGridMarker>();
+        [SerializeField] private UnityEngine.Rendering.Universal.DecalProjector projector;
 
-
-
-        [SerializeField] private GameObject baseMarker;
 
         private void Awake()
         {
@@ -47,93 +43,121 @@ namespace StatusGrid
             }
         }
 
+        private void Start()
+        {
+            SetupProjector();
+            GenerateTexture();
+        }
+
         private void OnEnable()
         {
             StatusGrid.Instance.StatusChanged += StatusChanged;
-            GenerateStatuses();
+            //GenerateTexture();
         }
 
         private void OnDisable()
         {
             StatusGrid.Instance.StatusChanged -= StatusChanged;
-            DeleteStatuses();
+            //DeleteTexture();
         }
 
-        private void GenerateStatuses()
+        private void SetupProjector()
         {
-            foreach(var square in MapGrid.Instance.GetAllSquares())
+            Vector2 center = MapGrid.Instance.Center;
+            Vector3 projectorPosition;
+            switch (heightType)
             {
-                StatusChanged(square, new Status(), StatusGrid.Instance.GetStatus(square));
+                case HeightType.Terrain:
+                    //projectorPosition = new Vector3(center.x, heightOffset, center.y);
+                    throw new NotImplementedException("need to write code to get height of any position bozo");
+                    break;
+                //case HeightType.World:
+                default:
+                    projectorPosition = new Vector3(center.x, heightOffset, center.y);
+                    break;
             }
+
+            projector.transform.position = projectorPosition;
+            projector.size = new Vector3(MapGrid.Instance.DimensionX,MapGrid.Instance.DimensionY,projector.size.z);
         }
 
-        private void DeleteStatuses()
+        private void GenerateTexture()
         {
-            foreach(var pair in markers)
+            //Debug.Log("generating texture... magGrid dims : "+ MapGrid.Instance.DimensionX+", "+MapGrid.Instance.DimensionY);
+            texture = new Texture2D(MapGrid.Instance.DimensionX, MapGrid.Instance.DimensionY);
+            texture.filterMode = FilterMode.Point;
+            
+            foreach (var square in MapGrid.Instance.GetAllSquares())
             {
-                Destroy(markers[pair.Key].gameObject);
+                var statusOfSquare = StatusGrid.Instance.GetStatus(square);
+
+                Color color = colorFor(statusOfSquare);
+
+                texture.SetPixel(square.x, square.y, color);
             }
-            markers.Clear();
+            texture.Apply();
+            projector.material.SetTexture("Base_Map",texture);
+            //Debug.Log("texture applied");
+        }
+
+        private Color colorFor(Status statusOfSquare)
+        {
+            List<Color> colors = new List<Color>();
+            foreach (StatusType status in Enum.GetValues(typeof(StatusType)))
+            {
+                if (statusOfSquare.IsStatus(status))
+                    colors.Add(ColorsForStatusTypes[status]);
+            }
+            if(colors.Count <= 0)
+            {
+                return Color.clear;
+            }
+            Color color = blend(colors);
+            return color;
+        }
+
+        private static Color blend(List<Color> colors)
+        {
+            Color finalColor = Color.black;
+            int colorCount = colors.Count;
+
+            if (colorCount > 0)
+            {
+                float r = 0f;
+                float g = 0f;
+                float b = 0f;
+
+                // Sum up the individual RGBA components
+                foreach (Color color in colors)
+                {
+                    r += color.r;
+                    g += color.g;
+                    b += color.b;
+                }
+
+                // Calculate the average for each component
+                r /= colorCount;
+                g /= colorCount;
+                b /= colorCount;
+
+
+                // Create the final color with averaged components
+                return new Color(r, g, b, 1); // Using the RGBA components
+            }
+            return Color.clear;
         }
 
         private void StatusChanged(Vector2Int position, Status oldStatus, Status newStatus)
         {
-            //Debug.Log("status changed ! ");
-            if(newStatus.statusByte == 0)
-            {
-                TryDeleteMarker(position);
-            }
-            else if (!markers.ContainsKey(position))
-            {
-                CreateMarker(position, newStatus);
-            }
-            else
-            {
-                ModifyMarker(position, newStatus);
-            }
-        }
+            //Debug.Log("detected change !");
 
-        private void TryDeleteMarker(Vector2Int position)
-        {
-            StatusGridMarker marker;
-            if(markers.TryGetValue(position,out marker))
-            {
-                Destroy(marker.gameObject);
-                markers.Remove(position);
-            }
-        }
+            Color color = colorFor(newStatus);
 
-        private void CreateMarker(Vector2Int position, Status status)
-        {
-            GameObject marker = Instantiate(baseMarker,transform);
-            StatusGridMarker statusGridMarker = marker.GetComponent<StatusGridMarker>();
+            texture.SetPixel(position.x,position.y, color);
 
-            Vector3 center;
+            texture.Apply();
 
-            if ((heightType == HeightType.World))
-            {
-                Vector2 centerNoHeight = MapGrid.Instance.GetCenterNoHeight(position);
-                center = new Vector3(centerNoHeight.x, heightOffset, centerNoHeight.y);
-            }
-            else // if Terrain
-            {
-                center = MapGrid.Instance.GetCenter(position);
-                center = new Vector3(center.x, center.y+ heightOffset, center.z);
-            }
-
-            marker.transform.position = center;
-            statusGridMarker.Status = status;
-
-            markers.Add(position, statusGridMarker);
-        }
-
-        private void ModifyMarker(Vector2Int position, Status status) 
-        {
-            StatusGridMarker marker;
-            if (markers.TryGetValue(position, out marker))
-            {
-                marker.Status = status;
-            }
+            projector.material.mainTexture = texture;
         }
     }
 

@@ -10,7 +10,7 @@ namespace StatusGrid
         // Start is called before the first frame update
         void Start()
         {
-            //Debug.Log("start of unw");
+            Debug.Log("start of unw");
 
             IEnumerable<Vector2Int> squares = MapGrid.Instance.GetAllSquares();
 
