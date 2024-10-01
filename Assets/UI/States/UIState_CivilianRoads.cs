@@ -8,6 +8,8 @@ namespace UIInGameStateMachine
 
     public class UIState_CivilianRoads : UIStateInGame
     {
+        [SerializeField] private Canvas canvas;
+
         [SerializeField] private GameObject RoadSelectionManager;
         //[SerializeField] private SelectionRenderer selectionRenderer;
         //[SerializeField] private SelectionLine selectionLine;

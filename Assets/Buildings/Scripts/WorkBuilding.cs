@@ -1,20 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class WorkBuilding : MonoBehaviour
+namespace Buildings
 {
-    public abstract Dictionary<CivilianType, int> MaxWorkers();
 
-    public Dictionary<CivilianType,int> workers { get; private set; }
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
 
-    private void Awake()
+    public abstract class WorkBuilding : Building
     {
-        workers = new Dictionary<CivilianType, int>();
-        foreach(CivilianType civilianType in Enum.GetValues(typeof(CivilianType)))
+        public abstract Dictionary<CivilianType, int> MaxWorkers();
+
+        public Dictionary<CivilianType, int> workers { get; private set; }
+
+        private void Awake()
         {
-            workers.Add(civilianType, 0);
+            workers = new Dictionary<CivilianType, int>();
+            foreach (CivilianType civilianType in Enum.GetValues(typeof(CivilianType)))
+            {
+                workers.Add(civilianType, 0);
+            }
         }
     }
 }

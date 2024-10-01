@@ -1,7 +1,11 @@
-public enum CivilianType 
+namespace Buildings
 {
-    Child,
-    LowSkillWorker,
-    Engineer,
-    Scientist
+
+    public enum CivilianType
+    {
+        Child,
+        LowSkillWorker,
+        Engineer,
+        Scientist
+    }
 }

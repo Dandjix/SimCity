@@ -90,7 +90,7 @@ namespace StatusGrid
                 case HeightType.Terrain:
                     //projectorPosition = new Vector3(center.x, heightOffset, center.y);
                     throw new NotImplementedException("need to write code to get height of any position bozo");
-                    break;
+                    //break;
                 //case HeightType.World:
                 default:
                     projectorPosition = new Vector3(center.x, heightOffset, center.y);
