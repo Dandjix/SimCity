@@ -9,8 +9,16 @@ namespace Buildings
     {
         // Use a list of lists to make the footprint editable in the Unity editor.
 
+        [HideInInspector]
         [SerializeField]
         private int width, height;
+
+        [HideInInspector]
+        public bool[] footprint;
+
+        [HideInInspector]
+        [SerializeField]
+        public Vector2Int offset;
 
         public int Width {  
             get { 
@@ -67,10 +75,6 @@ namespace Buildings
             return newFootprint;
         }
 
-        //[HideInInspector]
-        public bool[] footprint;
-
-        public Vector2Int offset;
 
         public FootprintData(int width,int height)
         {

@@ -11,6 +11,7 @@ namespace Buildings
             DrawOffsetHandle();
             DrawWidthHandle();
             DrawHeightHandle();
+            DrawToggleButtons();
         }
 
         private void DrawOffsetHandle()
@@ -24,17 +25,17 @@ namespace Buildings
             }
 
             Vector3 handlePos = new Vector3(
-                footprint.transform.position.x + footprint.FootprintData.offset.x +0.5f,
-                footprint.transform.position.y, // Keep the original Y position
-                footprint.transform.position.z + footprint.FootprintData.offset.y + 0.5f
+                footprint.transform.position.x + footprint.FootprintData.offset.x - 0.5f,
+                footprint.transform.position.y,
+                footprint.transform.position.z + footprint.FootprintData.offset.y - 0.5f
             );
 
             Vector3 newPos = Handles.PositionHandle(handlePos, Quaternion.identity);
 
 
             Vector2Int newOffset = new Vector2Int(
-                Mathf.RoundToInt(newPos.x - footprint.transform.position.x - 0.5f),
-                Mathf.RoundToInt(newPos.z - footprint.transform.position.z - 0.5f) // Use z for the z-axis
+                Mathf.RoundToInt(newPos.x - footprint.transform.position.x + 0.5f),
+                Mathf.RoundToInt(newPos.z - footprint.transform.position.z + 0.5f) // Use z for the z-axis
             );
 
 
@@ -42,6 +43,7 @@ namespace Buildings
             {
 
                 Undo.RecordObject(footprint.Building.BuildingSO, "Changed offset");
+                EditorUtility.SetDirty(footprint.Building.BuildingSO);
                 footprint.FootprintData.offset = newOffset;
 
             }
@@ -58,16 +60,16 @@ namespace Buildings
             }
 
             Vector3 handlePos = new Vector3(
-                footprint.transform.position.x + footprint.FootprintData.Width + footprint.FootprintData.offset.x + 0.5f,
+                footprint.transform.position.x + footprint.FootprintData.Width + footprint.FootprintData.offset.x ,
                 footprint.transform.position.y, // Keep the original Y position
-                footprint.transform.position.z + footprint.FootprintData.offset.y + 0.5f
+                footprint.transform.position.z + footprint.FootprintData.offset.y 
             );
 
             Handles.color = Color.red;
-            Vector3 newPos = Handles.FreeMoveHandle(handlePos, 1,Vector3.zero,Handles.CircleHandleCap);
+            Vector3 newPos = Handles.FreeMoveHandle(handlePos, 0.5f,Vector3.zero,Handles.CircleHandleCap);
 
 
-            int newWidth =Mathf.RoundToInt( newPos.x - footprint.transform.position.x - footprint.FootprintData.offset.x - 0.5f);
+            int newWidth =Mathf.RoundToInt( newPos.x - footprint.transform.position.x - footprint.FootprintData.offset.x );
 
             if(newWidth < 1)
                 newWidth = 1;
@@ -76,6 +78,7 @@ namespace Buildings
             {
 
                 Undo.RecordObject(footprint.Building.BuildingSO, "Changed width");
+                EditorUtility.SetDirty(footprint.Building.BuildingSO);
                 footprint.FootprintData.Width = newWidth;
 
             }
@@ -92,16 +95,16 @@ namespace Buildings
             }
 
             Vector3 handlePos = new Vector3(
-                footprint.transform.position.x + footprint.FootprintData.offset.x + 0.5f,
+                footprint.transform.position.x + footprint.FootprintData.offset.x ,
                 footprint.transform.position.y, // Keep the original Y position
-                footprint.transform.position.z + footprint.FootprintData.Height + footprint.FootprintData.offset.y + 0.5f
+                footprint.transform.position.z + footprint.FootprintData.Height + footprint.FootprintData.offset.y 
             );
 
             Handles.color = Color.blue;
-            Vector3 newPos = Handles.FreeMoveHandle(handlePos, 1, Vector3.zero, Handles.CircleHandleCap);
+            Vector3 newPos = Handles.FreeMoveHandle(handlePos, 0.5f, Vector3.zero, Handles.CircleHandleCap);
 
 
-            int newHeight = Mathf.RoundToInt(newPos.z - footprint.transform.position.z - footprint.FootprintData.offset.y - 0.5f);
+            int newHeight = Mathf.RoundToInt(newPos.z - footprint.transform.position.z - footprint.FootprintData.offset.y );
 
             if (newHeight < 1)
                 newHeight = 1;
@@ -110,8 +113,44 @@ namespace Buildings
             {
 
                 Undo.RecordObject(footprint.Building.BuildingSO, "Changed height");
+                EditorUtility.SetDirty(footprint.Building.BuildingSO);
                 footprint.FootprintData.Height = newHeight;
 
+            }
+        }
+
+        private void DrawToggleButtons()
+        {
+            Footprint footprint = (Footprint)target;
+
+            if (footprint.FootprintData == null)
+            {
+                Debug.Log("No FootprintData assigned.");
+                return;
+            }
+
+            Handles.color = Color.white;
+
+            for (int i = 0; i < footprint.FootprintData.Width; i++)
+            {
+                for (int j = 0; j < footprint.FootprintData.Height; j++)
+                {
+                    {
+                        Vector3 position = new Vector3(
+                            i+footprint.transform.position.x+footprint.FootprintData.offset.x+0.5f,
+                            footprint.transform.position.y,
+                            j+footprint.transform.position.z+footprint.FootprintData.offset.y+0.5f);
+
+
+                        if (Handles.Button(position, Quaternion.Euler(90,0,0), 0.5f, 0.5f, Handles.RectangleHandleCap))
+                        {
+                            //Debug.Log("The button was pressed!");
+                            Undo.RecordObject(footprint.Building.BuildingSO, "toggled footprint");
+                            EditorUtility.SetDirty(footprint.Building.BuildingSO);
+                            footprint.FootprintData.footprint[i + j * footprint.FootprintData.Width] = !footprint.FootprintData.footprint[i + j * footprint.FootprintData.Width];
+                        }
+                    }
+                }
             }
         }
     }
