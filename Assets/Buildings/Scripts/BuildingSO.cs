@@ -4,12 +4,14 @@ namespace Buildings
     using System.Collections.Generic;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName ="Building SO",menuName ="Buildings")]
+    [CreateAssetMenu(fileName ="Building SO",menuName ="Buildings/Building SO")]
     public class BuildingSO : ScriptableObject {
 
         [SerializeField] public FootprintData footprintData = new FootprintData(5,5);
 
         public string buildingName;
+
+        public BuildingCategory buildingCategory;
 
         public GameObject prefab;
 

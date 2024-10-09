@@ -11,8 +11,14 @@ namespace Buildings
     public class Footprint : MonoBehaviour
     {
         //public FootprintData FootprintData = new FootprintData(new bool[0],0,Vector2Int.zero);
-        public FootprintData FootprintData { 
-            get => Building.BuildingSO.footprintData;
+        public FootprintData FootprintData {
+            get 
+            { 
+                if(Building.BuildingSO == null)
+                    return null;
+
+                return Building.BuildingSO.footprintData; 
+            }
         }
 
         public Building Building {  get; private set; }
@@ -70,7 +76,40 @@ namespace Buildings
             }
         }
     
+        public IEnumerator<FootprintTile> EnumerateAllTiles()
+        {
+            if(FootprintData == null)
+            {
+                yield break;
+            }
 
+            for (int i = 0; i < FootprintData.Width; i++)
+            {
+                for (int j = 0; j < FootprintData.Height; j++)
+                {
+                    var tile =
+                        new FootprintTile
+                        (
+                            i + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x),
+                            j + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z), 
+                            FootprintData.footprint[i + j * FootprintData.Width]
+                        );
+                    yield return tile;
+                }
+            }
+        }
     
+    }
+
+    public struct FootprintTile
+    {
+        public int x, y;
+        public bool isPartOfBuilding;
+        public FootprintTile(int x, int y, bool isPartOfBuilding)
+        {
+            this.x = x; 
+            this.y = y;
+            this.isPartOfBuilding = isPartOfBuilding;
+        }
     }
 }

@@ -8,6 +8,11 @@ namespace Buildings
     public class Building : MonoBehaviour
     {
         public BuildingSO BuildingSO;
+        //{ get => 
+        //    {
+        //        return new BuildingSO(this);
+        //    } 
+        //}
 
         public Footprint footprint {  get; private set; }
 

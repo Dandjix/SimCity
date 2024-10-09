@@ -17,14 +17,14 @@ namespace UIInGameStateMachine
 
         public override void Exit(UIStateInGame to)
         {
-            if(
-                to.GetType() == typeof(UIState_Escape) ||
-                to.GetType() == typeof(UIState_Military) ||
-                to.GetType() == typeof(UIState_Quit)
-                )
-            {
+            //if(
+            //    to.GetType() == typeof(UIState_Escape) ||
+            //    to.GetType() == typeof(UIState_Military) ||
+            //    to.GetType() == typeof(UIState_Quit)
+            //    )
+            //{
                 Canvas.gameObject.SetActive(false);
-            }
+            //}
 
         }
 
