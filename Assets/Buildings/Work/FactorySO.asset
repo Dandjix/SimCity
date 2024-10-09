@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FactorySO
   m_EditorClassIdentifier: 
   footprintData:
-    width: 3
+    width: 2
     height: 2
-    footprint: 010101010100
+    footprint: 01010101
     offset: {x: -1, y: -1}
   buildingName: Weapons Factory
   buildingCategory: {fileID: 0}
