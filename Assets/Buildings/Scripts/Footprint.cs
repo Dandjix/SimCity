@@ -5,6 +5,7 @@ namespace Buildings
     using UnityEditor.PackageManager.UI;
     using UnityEditor;
     using UnityEngine;
+    using System;
 
     [ExecuteAlways]
     [RequireComponent(typeof(Building))]
@@ -49,49 +50,13 @@ namespace Buildings
                 if (isPartOfBuilding)
                 {
                     Handles.color = Color.red;
-                    //Gizmos.color = Color.red;
 
-                    //Vector3 position = new Vector3(i + FootprintData.offset.x + transform.position.x + 0.5f, transform.position.y, j + FootprintData.offset.y + transform.position.z + 0.5f);
                     Vector3 position = new Vector3(tile.x+0.5f, transform.position.y, tile.y+0.5f);
-                    //Vector3 scale = new Vector3(1, 0.01f, 1);
 
                     Handles.DrawSolidDisc(position, Vector3.up, 0.5f);
-                    //Gizmos.DrawCube(position, scale);
                 }
 
             }
-
-            //for (int i = 0; i < FootprintData.Width; i++)
-            //{
-            //    for (int j = 0; j < FootprintData.Height; j++)
-            //    {
-            //        bool isPartOfBuilding = FootprintData.footprint[i+j*FootprintData.Width];
-            //        if (isPartOfBuilding)
-            //        {
-            //            Handles.color = Color.red;
-            //            //Gizmos.color = Color.red;
-
-            //            Vector3 position = new Vector3(i + FootprintData.offset.x + transform.position.x +0.5f, transform.position.y, j + FootprintData.offset.y + transform.position.z+0.5f);
-            //            //Vector3 scale = new Vector3(1, 0.01f, 1);
-
-            //            Handles.DrawSolidDisc(position, Vector3.up,0.5f);
-            //            //Gizmos.DrawCube(position, scale);
-            //        }
-            //else
-            //{
-            //    Gizmos.color = Color.white;
-            //    Vector3 blCorner = new Vector3(i + FootprintData.offset.x + transform.position.x , transform.position.y, j + FootprintData.offset.y + transform.position.z );
-            //    Vector3 tlCorner = new Vector3(i + FootprintData.offset.x + transform.position.x , transform.position.y, j + FootprintData.offset.y + transform.position.z + 1);
-            //    Vector3 brCorner = new Vector3(i + FootprintData.offset.x + transform.position.x + 1, transform.position.y, j + FootprintData.offset.y + transform.position.z );
-            //    Vector3 trCorner = new Vector3(i + FootprintData.offset.x + transform.position.x + 1, transform.position.y, j + FootprintData.offset.y + transform.position.z + 1);
-
-            //    Gizmos.DrawLine(blCorner, tlCorner);
-            //    Gizmos.DrawLine(tlCorner, trCorner);
-            //    Gizmos.DrawLine(trCorner, brCorner);
-            //    Gizmos.DrawLine(brCorner, blCorner);
-            //}
-            //}
-            //}
         }
     
         public IEnumerable<FootprintTile> EnumerateAllTiles()
@@ -101,23 +66,91 @@ namespace Buildings
                 yield break;
             }
 
+            //float yAngle = transform.rotation.eulerAngles.y;
+
+
+
+            //for (int i = 0; i < FootprintData.Width; i++)
+            //{
+            //    for (int j = 0; j < FootprintData.Height; j++)
+            //    {
+            //        int x, y;
+
+            //        switch (yAngle)
+            //        {
+            //            case (0):
+            //                x = i + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+            //                y = j + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+            //                break;
+            //            case 90:
+            //                // 90-degree rotation: swap i and j, reverse i
+            //                x = j + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+            //                y = -i + 1 + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+            //                break;
+            //            case 180:
+            //                // 180-degree rotation: reverse both i and j
+            //                x = -i + 1 + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+            //                y = -j + 1 + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+            //                break;
+            //            case 270:
+            //                // 270-degree rotation: swap i and j, reverse j
+            //                x = -j + 1 + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+            //                y = i + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+            //                break;
+            //            default:
+            //                yield break;
+            //        }
+
+            // free optimisation (probably insignificant)
+
+            float yAngle = transform.rotation.eulerAngles.y;
+
+            Func<int, int, int> calculateX, calculateY;
+
+            switch (yAngle)
+            {
+                case 0:
+                    calculateX = (i, j) => i + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+                    calculateY = (i, j) => j + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+                    break;
+                case 90:
+                    calculateX = (i, j) => j + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+                    calculateY = (i, j) => -i + 1 + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+                    break;
+                case 180:
+                    calculateX = (i, j) => -i + 1 + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+                    calculateY = (i, j) => -j + 1 + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+                    break;
+                case 270:
+                    calculateX = (i, j) => -j + 1 + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x);
+                    calculateY = (i, j) => i + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z);
+                    break;
+                default:
+                    yield break;
+            }
+
+
             for (int i = 0; i < FootprintData.Width; i++)
             {
                 for (int j = 0; j < FootprintData.Height; j++)
                 {
+                    int x = calculateX(i, j);
+                    int y = calculateY(i, j);
+
                     var tile =
-                        new FootprintTile
-                        (
-                            i + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x),
-                            j + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z),
-                            i + j * FootprintData.Width,
-                            FootprintData.footprint[i + j * FootprintData.Width]
-                        );
-                    yield return tile;
+                            new FootprintTile
+                            (
+                                //i + FootprintData.offset.x + Mathf.RoundToInt(transform.position.x),
+                                //j + FootprintData.offset.y + Mathf.RoundToInt(transform.position.z),
+                                x,
+                                y,
+                                i + j * FootprintData.Width,
+                                FootprintData.footprint[i + j * FootprintData.Width]
+                            );
+                        yield return tile;
                 }
             }
         }
-    
     }
 
     public struct FootprintTile

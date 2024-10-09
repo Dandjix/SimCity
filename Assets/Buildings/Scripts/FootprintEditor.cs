@@ -131,24 +131,20 @@ namespace Buildings
 
             Handles.color = Color.white;
 
-            for (int i = 0; i < footprint.FootprintData.Width; i++)
+            foreach (FootprintTile tile in footprint.EnumerateAllTiles())
             {
-                for (int j = 0; j < footprint.FootprintData.Height; j++)
                 {
+                    Vector3 position = new Vector3(
+                        tile.x + 0.5f,
+                        footprint.transform.position.y,
+                        tile.y + 0.5f);
+
+
+                    if (Handles.Button(position, Quaternion.Euler(90, 0, 0), 0.5f, 0.5f, Handles.RectangleHandleCap))
                     {
-                        Vector3 position = new Vector3(
-                            i+footprint.transform.position.x+footprint.FootprintData.offset.x+0.5f,
-                            footprint.transform.position.y,
-                            j+footprint.transform.position.z+footprint.FootprintData.offset.y+0.5f);
-
-
-                        if (Handles.Button(position, Quaternion.Euler(90,0,0), 0.5f, 0.5f, Handles.RectangleHandleCap))
-                        {
-                            //Debug.Log("The button was pressed!");
-                            Undo.RecordObject(footprint.Building.BuildingSO, "toggled footprint");
-                            EditorUtility.SetDirty(footprint.Building.BuildingSO);
-                            footprint.FootprintData.footprint[i + j * footprint.FootprintData.Width] = !footprint.FootprintData.footprint[i + j * footprint.FootprintData.Width];
-                        }
+                        Undo.RecordObject(footprint.Building.BuildingSO, "toggled footprint");
+                        EditorUtility.SetDirty(footprint.Building.BuildingSO);
+                        footprint.FootprintData.footprint[tile.footprintIndex] = !footprint.FootprintData.footprint[tile.footprintIndex];
                     }
                 }
             }
