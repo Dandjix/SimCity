@@ -20,6 +20,7 @@ namespace Buildings
         [SerializeField]
         public Vector2Int offset;
 
+
         public int Width {  
             get { 
                 return width; 

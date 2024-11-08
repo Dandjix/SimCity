@@ -9,8 +9,10 @@ namespace Buildings
         protected virtual void OnSceneGUI()
         {
             DrawOffsetHandle();
+
             DrawWidthHandle();
             DrawHeightHandle();
+
             DrawToggleButtons();
         }
 
@@ -30,6 +32,8 @@ namespace Buildings
                 footprint.transform.position.z + footprint.FootprintData.offset.y - 0.5f
             );
 
+            Handles.Label(handlePos, "footprint offset");
+
             Vector3 newPos = Handles.PositionHandle(handlePos, Quaternion.identity);
 
 
@@ -48,7 +52,7 @@ namespace Buildings
 
             }
         }
-    
+
         private void DrawWidthHandle()
         {
             Footprint footprint = (Footprint)target;

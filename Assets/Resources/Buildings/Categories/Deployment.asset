@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e19f8a7240cc654f95c01a33c662e5b, type: 3}
   m_Name: Deployment
   m_EditorClassIdentifier: 
-  description: 
+  description: does stuff
   icon: {fileID: 1378602224, guid: 09c3ba4fdae323a4fbc0be0a8e4c4466, type: 3}
   color: {r: 0.9059149, g: 1, b: 0.8660377, a: 1}
   order: 0

@@ -17,7 +17,7 @@
         /// </summary>
         public byte order = 0;
 
-        public static BuildingCategory[] getAll()
+        public static BuildingCategory[] GetAll()
         {
             var cats = Resources.LoadAll<BuildingCategory>("Buildings/Categories");
             Array.Sort(cats);
