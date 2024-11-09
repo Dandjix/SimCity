@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 220d9f776506ea04896577045e829cb6, type: 3}
-  m_Name: BasicTurret
+  m_Name: AdvancedTurret
   m_EditorClassIdentifier: 
   footprintData:
-    width: 2
-    height: 2
-    footprint: 01010101
+    width: 1
+    height: 1
+    footprint: 01
     offset: {x: 0, y: 0}
   buildingName: Basic Turret
   buildingCategory: {fileID: 11400000, guid: e05e4ffa39c05eb4d884040c6c580e94, type: 2}
   prefab: {fileID: 4975900126293107850, guid: 2660d17c4fb680e4e823cd3520bb1e21, type: 3}
   menuIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  base_buildTime_minutes: 30
-  base_buildCost_cents: 100000
+  base_buildTime_minutes: 60
+  base_buildCost_cents: 200000

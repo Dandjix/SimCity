@@ -7,7 +7,7 @@ namespace IngameUI
     using Buildings;
     using UIInGameStateMachine;
 
-    public class CategoryOption : MonoBehaviour
+    public class BuildingCategoryOption : MonoBehaviour
     {
         [SerializeField]private Button button;
 
@@ -43,7 +43,7 @@ namespace IngameUI
 
         private void Switch()
         {
-           BuildingSelector.Instance.SetCategory(this);
+           BuildingSelector.Instance.SetCategoryOption(this);
         }
 
         private void UpdateAppearance()

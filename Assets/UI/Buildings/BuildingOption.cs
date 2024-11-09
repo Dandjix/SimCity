@@ -5,12 +5,14 @@ namespace IngameUI
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using TMPro;
 
     public class BuildingOption : MonoBehaviour
     {
         [SerializeField] private GameObject outline;
         [SerializeField] private Image image;
         [SerializeField] private Button button;
+        [SerializeField] private TMP_Text buildingName;
 
         [SerializeField]
         private BuildingSO buildingSO;
@@ -36,6 +38,7 @@ namespace IngameUI
             }
             set
             {
+                //Debug.Log("Selected : "+buildingSO.name);
                 selected = value;
                 UpdateIsSelected();
             }
@@ -51,7 +54,8 @@ namespace IngameUI
 
         private void Clicked()
         {
-            BuildingSelector.Instance.SetSelectedBuilding(this);
+            //Debug.Log("clicked : " + buildingSO.name);
+            BuildingSelector.Instance.SetSelectedBuildingOption(this);
         }
 
         private void UpdateAppearance()
@@ -59,6 +63,7 @@ namespace IngameUI
             if(buildingSO == null)
                 return;
             image.sprite = buildingSO.menuIcon;
+            buildingName.text = buildingSO.name;
         }
 
         private void UpdateIsSelected()

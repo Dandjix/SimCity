@@ -15,7 +15,7 @@ MonoBehaviour:
   footprintData:
     width: 3
     height: 3
-    footprint: 010101010101010101
+    footprint: 010101000000010101
     offset: {x: -1, y: -1}
   buildingName: Munitions Factory
   buildingCategory: {fileID: 11400000, guid: c246647111de56f41aa516721407dddc, type: 2}

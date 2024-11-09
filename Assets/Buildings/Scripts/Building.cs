@@ -21,11 +21,14 @@ namespace Buildings
         private Transform anchorTransform;
         //private Transform AnchorTransform { get => anchorTransform; }
 
+        /// <summary>
+        /// the anchor in float values.
+        /// </summary>
         public Vector2 Anchor
         {
             get
             {
-                return new Vector2(anchorTransform.position.x, anchorTransform.position.z);
+                return new Vector2(Mathf.Round(anchorTransform.position.x),Mathf.Round(anchorTransform.position.z));
             }
         }
 
@@ -37,7 +40,10 @@ namespace Buildings
         private void OnDrawGizmosSelected()
         {
             Handles.color = Color.green;
-            Handles.DrawSolidDisc(anchorTransform.transform.position, Vector3.up, 0.5f);
+
+            Vector3 anchorPosition = new Vector3(Anchor.x, transform.position.y, Anchor.y);
+
+            Handles.DrawSolidDisc(anchorPosition, Vector3.up, 0.5f);
         }
 
     }

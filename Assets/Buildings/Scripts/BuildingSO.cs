@@ -10,7 +10,9 @@ namespace Buildings
 
         public static BuildingSO[] GetAll(BuildingCategory category)
         {
-            BuildingSO[] cats = Resources.LoadAll<BuildingSO>("Resources/Buildings/SOs");
+            BuildingSO[] cats = Resources.LoadAll<BuildingSO>("Buildings/SOs");
+
+            //Debug.Log("all categories : "+cats.Length);
 
             if (category == null)
             {
