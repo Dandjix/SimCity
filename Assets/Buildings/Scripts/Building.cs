@@ -8,6 +8,14 @@ namespace Buildings
     [RequireComponent(typeof(Footprint))]
     public class Building : MonoBehaviour
     {
+        private static float roundToZ5(float x)
+        {
+            float y = Mathf.Round(x * 2);
+
+            return y / 2;
+        }
+
+
         public BuildingSO BuildingSO;
         //{ get => 
         //    {
@@ -28,7 +36,7 @@ namespace Buildings
         {
             get
             {
-                return new Vector2(Mathf.Round(anchorTransform.position.x),Mathf.Round(anchorTransform.position.z));
+                return new Vector2(roundToZ5(anchorTransform.position.x), roundToZ5(anchorTransform.position.z));
             }
         }
 

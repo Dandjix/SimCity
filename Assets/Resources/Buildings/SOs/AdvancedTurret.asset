@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AdvancedTurret
   m_EditorClassIdentifier: 
   footprintData:
-    width: 1
-    height: 1
-    footprint: 01
+    width: 2
+    height: 2
+    footprint: 01010101
     offset: {x: 0, y: 0}
   buildingName: Basic Turret
   buildingCategory: {fileID: 11400000, guid: e05e4ffa39c05eb4d884040c6c580e94, type: 2}

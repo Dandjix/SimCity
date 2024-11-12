@@ -13,6 +13,7 @@ namespace IngameUI
 
         private void Awake()
         {
+            
             Instance = this;
         }
 
@@ -97,6 +98,7 @@ namespace IngameUI
 
             if(buildingOption == null)
             {
+                BuildingOption = null;
                 return;
             }
 

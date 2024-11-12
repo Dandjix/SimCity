@@ -33,10 +33,15 @@ namespace IngameUI
         {
             if (buildingSilhouette != null)
             {
-                Destroy(buildingSilhouette);
+                Destroy(buildingSilhouette.gameObject);
+            }
+            if (option == null)
+            {
+                return;
             }
 
-            GameObject silhouetteGO = Instantiate(option.gameObject);
+            GameObject silhouetteGO = Instantiate(option.BuildingSO.prefab);
+            silhouetteGO.name = "building placement silhouette";
 
             buildingSilhouette = silhouetteGO.transform;
         }
@@ -58,7 +63,7 @@ namespace IngameUI
             {
                 Vector2 anchor = buildingOption.BuildingSO.prefab.GetComponent<Buildings.Building>().Anchor;
 
-                Vector2 position = coordsToPlace.Value + anchor;
+                Vector2 position = coordsToPlace.Value;// + anchor;
 
                 Vector2Int intPosition = new Vector2Int(Mathf.RoundToInt(position.x),Mathf.RoundToInt(position.y));
 
